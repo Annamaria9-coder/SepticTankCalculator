@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Septic Tank Calculator</title>
+</head>
+<body>
+    <h1>Septic Tank Calculator</h1>
+    <form action="/calculate" method="post">
+        <label for="household_size">Household Size:</label>
+        <input type="number" id="household_size" name="household_size" required><br><br>
+
+        <label for="tank_type">Tank Type:</label>
+        <select id="tank_type" name="tank_type" required>
+            <option value="3">3-Chambered Tank</option>
+            <option value="4">4-Chambered Tank</option>
+        </select><br><br>
+
+        <button type="submit">Calculate</button>
+    </form>
+</body>
+</html>
