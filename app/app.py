@@ -1,7 +1,26 @@
-# constants.py
+# app.py
 
-SLUDGE_ACCUMULATION_RATE = 0.04  # m3 per capita per year
-FLUSH_COUNT = 5  # Flush count per person
-CISTERN_SIZE = 0.009  # m3
-LIQUID_DEPTH = 1.0  # Liquid depth in meters
-FREEBOARD = 0.3  # Freeboard in meters for safety
+from flask import Flask, render_template, request
+from input_parameters import get_user_inputs
+from calculations import calculate_volume_liquid, calculate_volume_sludge, calculate_total_volume
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/calculate', methods=['POST'])
+def calculate():
+    household_size = int(request.form['household_size'])
+    tank_type = request.form['tank_type']
+    
+    # Get calculation values
+    volume_liquid = calculate_volume_liquid(household_size)
+    volume_sludge = calculate_volume_sludge(household_size)
+    total_volume = calculate_total_volume(volume_liquid, volume_sludge)
+
+    return render_template('result.html', volume_liquid=volume_liquid, volume_sludge=volume_sludge, total_volume=total_volume)
+
+if __name__ == "__main__":
+    app.run(debug=True)
