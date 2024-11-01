@@ -8,19 +8,21 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-@app.route('/calculate', methods=['POST'])
+@app.route('/calculate', methods=['GET', 'POST'])
 def calculate():
-    user_inputs = {
-        "household_size": int(request.form['household_size']),
-        "tank_type": request.form['tank_type'],
-        "retention_time": float(request.form['retention_time']),
-        "borehole_distance": float(request.form['borehole_distance']),
-        "seasonal_factor": float(request.form['seasonal_factor']),
-        "sand_thickness": float(request.form['sand_thickness'])
-    }
-    
-    results = calculate_tank_requirements(user_inputs)
-    return render_template('result.html', results=results)
+    if request.method == 'POST':
+        user_inputs = {
+            "household_size": int(request.form['household_size']),
+            "tank_type": request.form['tank_type'],
+            "retention_time": float(request.form['retention_time']),
+            "borehole_distance": float(request.form['borehole_distance']),
+            "seasonal_factor": float(request.form['seasonal_factor']),
+            "sand_thickness": float(request.form['sand_thickness'])
+        }
+        results = calculate_tank_requirements(user_inputs)
+        return render_template('result.html', results=results)
+    return render_template('index.html')  # Renders the form if GET request
+
 
 if __name__ == "__main__":
     app.run(debug=True)
