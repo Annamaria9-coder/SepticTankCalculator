@@ -25,7 +25,7 @@
 
 <div class="container">
     <h1>Calculation Results</h1>
-    <div class="results">
+    <div class="results mb-5">
         <p>Volume of Liquid: {{ results['Volume of Liquid'] }} m³</p>
         <p>Volume of Sludge: {{ results['Volume of Sludge'] }} m³</p>
         <p>Total Tank Volume: {{ results['Total Tank Volume'] }} m³</p>
@@ -33,9 +33,9 @@
         <p>Sand Thickness: {{ results['Sand Thickness'] }} m</p>
     </div>
 
-    <!-- 3D Visualization Canvas -->
-    <h2>3D Septic Tank Visualization</h2>
-    <div id="tank-visualization" style="width: 100%; height: 500px;"></div>
+    <!-- 3D Visualization Section -->
+    <h2 class="text-center mb-4" style="font-size: 1.75rem;">3D Septic Tank Visualization</h2>
+    <div id="tank-visualization" style="width: 80%; height: 400px; margin: 0 auto; background-color: #f8f9fa; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);"></div>
 </div>
 
 <!-- Inline JavaScript for 3D Visualization -->
@@ -50,7 +50,7 @@
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / 500, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, 500); // Width of container
+        renderer.setSize(document.getElementById('tank-visualization').clientWidth, 400); // Set canvas size to match container
         document.getElementById('tank-visualization').appendChild(renderer.domElement);
 
         // Create tank geometry and material
@@ -72,8 +72,8 @@
 
         // Adjust the canvas size when the window is resized
         window.addEventListener('resize', () => {
-            renderer.setSize(window.innerWidth, 500);
-            camera.aspect = window.innerWidth / 500;
+            renderer.setSize(document.getElementById('tank-visualization').clientWidth, 400);
+            camera.aspect = document.getElementById('tank-visualization').clientWidth / 400;
             camera.updateProjectionMatrix();
         });
     });
