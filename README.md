@@ -70,9 +70,7 @@ Welcome! This guide explains how our **Septic Tank Calculator** works and walks 
 
 The calculator is designed to provide an easy tool for estimating the septic tank size based on inputs like the household size and type of tank. It’s useful for rural community projects where engineers need quick calculations for sanitation planning.
 
-## How the Code Works
-
-### Main Components
+## How to access and run the program
 
 1. **Flask Application (app/app.py)**: 
    - This file runs the server and serves the web interface to users. It renders the HTML templates (`index.html` for input and `result.html` for output) and manages requests from the user’s browser.
@@ -90,21 +88,19 @@ The calculator is designed to provide an easy tool for estimating the septic tan
    - `index.html` is the main page where users enter information.
    - `result.html` displays the calculation results after the user submits the form.
 
-### Step-by-Step Workflow
-
-1. **User Accesses the Interface**:
+5. **User Accesses the Interface**:
    - When the user navigates to [http://127.0.0.1:5000/](http://127.0.0.1:5000/), they see a form where they can enter the household size and tank type.
 
-2. **User Inputs Data**:
+6. **User Inputs Data**:
    - The user inputs their values, like the household size, and selects the tank type.
 
-3. **Form Submission**:
+7. **Form Submission**:
    - Upon clicking "Calculate," the data is sent to the `/calculate` route in `app/app.py`.
 
-4. **Data Processing**:
+8. **Data Processing**:
    - `app/app.py` calls the calculation functions, passing the user inputs. The `calculate_volume_liquid()`, `calculate_volume_sludge()`, and `calculate_total_volume()` functions calculate the necessary tank volumes.
 
-5. **Display Results**:
+9. **Display Results**:
    - The calculated values are then displayed on `result.html`, showing the volumes for liquid, sludge, and the total tank volume.
 
 ## Running the Application Locally
