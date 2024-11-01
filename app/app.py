@@ -25,15 +25,19 @@ def calculate():
 
 @app.route('/results')
 def results():
-    # Example data; replace this with actual calculation results if available
+    # Example data with dimensions
     example_results = {
         'Volume of Liquid': 1.2,
         'Volume of Sludge': 0.5,
         'Total Tank Volume': 2.0,
         'H2S Emissions': 0.3,
-        'Sand Thickness': 0.1
+        'Sand Thickness': 0.1,
+        'Tank Width': 2,  # Replace with calculated width
+        'Tank Height': 1.5,  # Replace with calculated height
+        'Tank Depth': 3  # Replace with calculated depth
     }
     return render_template('result.html', results=example_results)
+
 
 
 if __name__ == "__main__":
