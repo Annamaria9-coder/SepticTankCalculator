@@ -1,36 +1,46 @@
-<!-- index.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Septic Tank Calculator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+
+<div class="sidebar">
+    <h2>Septic Calculator</h2>
+    <a href="/">Home</a>
+    <a href="/calculate">Calculator</a>
+    <a href="/results">Results</a>
+</div>
+
+<div class="container">
     <h1>Septic Tank Design Tool</h1>
     <form action="/calculate" method="post">
         <label for="household_size">Household Size:</label>
-        <input type="number" id="household_size" name="household_size" required><br><br>
+        <input type="number" id="household_size" name="household_size" required>
 
         <label for="tank_type">Tank Type:</label>
         <select id="tank_type" name="tank_type" required>
             <option value="3">3-Chambered Tank</option>
             <option value="4">4-Chambered Tank</option>
-        </select><br><br>
+        </select>
 
         <label for="retention_time">Retention Time (days):</label>
-        <input type="number" id="retention_time" name="retention_time" required><br><br>
+        <input type="number" id="retention_time" name="retention_time" required>
 
         <label for="borehole_distance">Distance to Borehole (m):</label>
-        <input type="number" id="borehole_distance" name="borehole_distance" required><br><br>
+        <input type="number" id="borehole_distance" name="borehole_distance" required>
 
         <label for="seasonal_factor">Seasonal Factor:</label>
-        <input type="number" id="seasonal_factor" name="seasonal_factor" required><br><br>
+        <input type="number" id="seasonal_factor" name="seasonal_factor" required>
 
         <label for="sand_thickness">Sand Thickness (m):</label>
-        <input type="number" id="sand_thickness" name="sand_thickness" required><br><br>
+        <input type="number" id="sand_thickness" name="sand_thickness" required>
 
         <button type="submit">Calculate</button>
     </form>
+</div>
+
 </body>
 </html>
