@@ -1,3 +1,5 @@
+<!-- result.html -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,9 +8,11 @@
 </head>
 <body>
     <h1>Septic Tank Calculation Results</h1>
-    <p>Volume of Liquid: {{ volume_liquid }} m<sup>3</sup></p>
-    <p>Volume for Sludge and Scum Storage: {{ volume_sludge }} m<sup>3</sup></p>
-    <p>Total Tank Volume: {{ total_volume }} m<sup>3</sup></p>
+    <p>Volume of Liquid: {{ results['Volume of Liquid'] }} m³</p>
+    <p>Volume of Sludge: {{ results['Volume of Sludge'] }} m³</p>
+    <p>Total Tank Volume: {{ results['Total Tank Volume'] }} m³</p>
+    <p>H₂S Emissions: {{ results['H2S Emissions'] }} g/day</p>
+    <p>Sand Thickness: {{ results['Sand Thickness'] }} m</p>
     <a href="/">Back to Home</a>
 </body>
 </html>
