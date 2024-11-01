@@ -15,7 +15,7 @@ This project is a simple **Septic Tank Calculator** designed to help engineers a
 
 1. **Clone the Repository**:
    ```bash
-   git clone [https://github.com/YOUR_USERNAME/SepticTankCalculator.git](https://github.com/Annamaria9-coder/SepticTankCalculator.git)
+   git clone https://github.com/Annamaria9-coder/SepticTankCalculator.git
    cd SepticTankCalculator
 
 	2.	Set Up a Virtual Environment (Recommended):
