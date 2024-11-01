@@ -1,6 +1,6 @@
 # calculations.py
+from app.constants import SLUDGE_ACCUMULATION_RATE, FLUSH_COUNT, CISTERN_SIZE, LIQUID_DEPTH, FREEBOARD
 
-from constants import SLUDGE_ACCUMULATION_RATE, FLUSH_COUNT, CISTERN_SIZE, LIQUID_DEPTH, FREEBOARD
 
 def calculate_volume_liquid(household_size):
     return FLUSH_COUNT * CISTERN_SIZE * household_size
