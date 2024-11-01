@@ -1,8 +1,8 @@
 # app.py
 
 from flask import Flask, render_template, request
-from input_parameters import get_user_inputs
-from calculations import calculate_volume_liquid, calculate_volume_sludge, calculate_total_volume
+from app.input_parameters import get_user_inputs
+from app.calculations import calculate_volume_liquid, calculate_volume_sludge, calculate_total_volume
 
 app = Flask(__name__)
 
