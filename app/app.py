@@ -23,6 +23,18 @@ def calculate():
         return render_template('result.html', results=results)
     return render_template('index.html')  # Renders the form if GET request
 
+@app.route('/results')
+def results():
+    # Example data; replace this with actual calculation results if available
+    example_results = {
+        'Volume of Liquid': 1.2,
+        'Volume of Sludge': 0.5,
+        'Total Tank Volume': 2.0,
+        'H2S Emissions': 0.3,
+        'Sand Thickness': 0.1
+    }
+    return render_template('result.html', results=example_results)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
