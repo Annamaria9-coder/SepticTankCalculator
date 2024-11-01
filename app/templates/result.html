@@ -1,18 +1,30 @@
-<!-- result.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Calculation Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Septic Tank Calculation Results</h1>
-    <p>Volume of Liquid: {{ results['Volume of Liquid'] }} m³</p>
-    <p>Volume of Sludge: {{ results['Volume of Sludge'] }} m³</p>
-    <p>Total Tank Volume: {{ results['Total Tank Volume'] }} m³</p>
-    <p>H₂S Emissions: {{ results['H2S Emissions'] }} g/day</p>
-    <p>Sand Thickness: {{ results['Sand Thickness'] }} m</p>
-    <a href="/">Back to Home</a>
+
+<div class="sidebar">
+    <h2>Septic Calculator</h2>
+    <a href="/">Home</a>
+    <a href="/calculate">Calculator</a>
+    <a href="/results">Results</a>
+</div>
+
+<div class="container">
+    <h1>Calculation Results</h1>
+    <div class="results">
+        <p>Volume of Liquid: {{ results['Volume of Liquid'] }} m³</p>
+        <p>Volume of Sludge: {{ results['Volume of Sludge'] }} m³</p>
+        <p>Total Tank Volume: {{ results['Total Tank Volume'] }} m³</p>
+        <p>H₂S Emissions: {{ results['H2S Emissions'] }} g/day</p>
+        <p>Sand Thickness: {{ results['Sand Thickness'] }} m</p>
+        <a href="/" class="button">Back to Home</a>
+    </div>
+</div>
+
 </body>
 </html>
