@@ -1,6 +1,4 @@
-# app.py
-
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for  # Added url_for for static files
 from .input_parameters import get_user_inputs
 from .calculations import calculate_tank_requirements
 
