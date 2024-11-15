@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Septic Tank Design Tool</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- Bootstrap for alert styling -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h1>Septic Tank Design Tool</h1>
+    
+    <!-- Display warning flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} mt-3">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form action="/calculate" method="post">
+        <label for="household_size">Household Size:</label>
+        <input type="number" id="household_size" name="household_size" class="form-control" required>
+        
+        <label for="tank_type">Tank Type:</label>
+        <select id="tank_type" name="tank_type" class="form-select" required>
+            <option value="3">3-Chambered Tank</option>
+            <option value="4">4-Chambered Tank</option>
+        </select>
+        
+        <label for="retention_time">Retention Time (days):</label>
+        <input type="number" id="retention_time" name="retention_time" class="form-control" required>
+        
+        <label for="borehole_distance">Distance to Borehole (m):</label>
+        <input type="number" id="borehole_distance" name="borehole_distance" class="form-control" required>
+        
+        <label for="seasonal_factor">Seasonal Factor:</label>
+        <input type="number" id="seasonal_factor" name="seasonal_factor" class="form-control" required>
+        
+        <label for="sand_thickness">Sand Thickness (m):</label>
+        <input type="number" id="sand_thickness" name="sand_thickness" class="form-control" required>
+
+        <button type="submit" class="btn btn-primary mt-3">Calculate</button>
+    </form>
+</div>
+</body>
+</html>
