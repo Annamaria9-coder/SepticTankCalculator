@@ -11,9 +11,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
     <!-- Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- Three.js Font Loader for text -->
-    <script src="https://threejs.org/examples/jsm/loaders/FontLoader.js"></script>
-    <script src="https://threejs.org/examples/jsm/geometries/TextGeometry.js"></script>
+    <!-- Bootstrap JavaScript Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
 
@@ -27,6 +26,7 @@
 <div class="container">
     <h1 class="text-center mt-4">Calculation Results</h1>
     <div class="results mb-5 p-3 bg-light rounded shadow-sm">
+        <!-- Result placeholders with animation classes -->
         <p>Volume of Liquid: <span class="result-value" data-value="{{ results.get('Volume of Liquid', 'N/A') }}">0</span> m³</p>
         <p>Volume of Sludge: <span class="result-value" data-value="{{ results.get('Volume of Sludge', 'N/A') }}">0</span> m³</p>
         <p>Total Tank Volume: <span class="result-value" data-value="{{ results.get('Total Tank Volume', 'N/A') }}">0</span> m³</p>
@@ -46,6 +46,42 @@
     <div id="tank-visualization" style="width: 80%; height: 400px; margin: 0 auto; background-color: #f8f9fa; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);"></div>
 </div>
 
+<!-- Inline JavaScript for Sequential Animation -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Function to animate counting from 0 to target value
+        function animateValue(element, targetValue) {
+            let startValue = 0;
+            let duration = 2000; // Duration in ms
+            let stepTime = Math.abs(Math.floor(duration / targetValue));
+            let increment = Math.ceil(targetValue / 100); // Smooth increment
+
+            let timer = setInterval(() => {
+                startValue += increment;
+                if (startValue >= targetValue) {
+                    startValue = targetValue; // To prevent overflow
+                    clearInterval(timer);
+                }
+                element.innerText = startValue.toFixed(2);
+            }, stepTime);
+        }
+
+        // Get all elements with the class "result-value" for sequential animation
+        const results = document.querySelectorAll('.result-value');
+        
+        // Sequential animation logic
+        let delay = 0;
+        results.forEach((result) => {
+            const targetValue = parseFloat(result.dataset.value);
+            setTimeout(() => {
+                animateValue(result, targetValue);
+            }, delay);
+            delay += 500; // Delay between each result
+        });
+    });
+</script>
+
+<!-- 3D Visualization Code (unchanged) -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const tankWidth = {{ results.get('Tank Width', 1) }};
@@ -63,31 +99,8 @@
         const tank = new THREE.Mesh(geometry, material);
         scene.add(tank);
 
-        // Position camera
         camera.position.z = 5;
 
-        // Add text labels for each dimension
-        const loader = new THREE.FontLoader();
-        loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', (font) => {
-            const createTextLabel = (text, position) => {
-                const textGeometry = new THREE.TextGeometry(text, {
-                    font: font,
-                    size: 0.3,
-                    height: 0.05,
-                });
-                const textMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
-                const textMesh = new THREE.Mesh(textGeometry, textMaterial);
-                textMesh.position.set(position.x, position.y, position.z);
-                scene.add(textMesh);
-            };
-
-            // Label each dimension on appropriate side
-            createTextLabel(`Width: ${tankWidth} m`, { x: tankWidth / 2, y: 0, z: tankDepth / 2 });
-            createTextLabel(`Height: ${tankHeight} m`, { x: 0, y: tankHeight / 2, z: tankDepth / 2 });
-            createTextLabel(`Depth: ${tankDepth} m`, { x: 0, y: 0, z: -tankDepth / 2 });
-        });
-
-        // Animation loop
         function animate() {
             requestAnimationFrame(animate);
             tank.rotation.y += 0.01;
@@ -95,7 +108,6 @@
         }
         animate();
 
-        // Adjust canvas on window resize
         window.addEventListener('resize', () => {
             renderer.setSize(document.getElementById('tank-visualization').clientWidth, 400);
             camera.aspect = document.getElementById('tank-visualization').clientWidth / 400;
@@ -103,6 +115,9 @@
         });
     });
 </script>
+
+<!-- Additional JavaScript for sidebar animation -->
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 
 </body>
 </html>
