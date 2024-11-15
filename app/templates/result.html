@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
     <!-- Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- CSS2DRenderer for labels -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/renderers/CSS2DRenderer.js"></script>
     <!-- Bootstrap JavaScript Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
@@ -26,7 +28,6 @@
 <div class="container">
     <h1 class="text-center mt-4">Calculation Results</h1>
     <div class="results mb-5 p-3 bg-light rounded shadow-sm">
-        <!-- Result placeholders with animation classes -->
         <p>Volume of Liquid: <span class="result-value" data-value="{{ results.get('Volume of Liquid', 'N/A') }}">0</span> m³</p>
         <p>Volume of Sludge: <span class="result-value" data-value="{{ results.get('Volume of Sludge', 'N/A') }}">0</span> m³</p>
         <p>Total Tank Volume: <span class="result-value" data-value="{{ results.get('Total Tank Volume', 'N/A') }}">0</span> m³</p>
@@ -35,53 +36,15 @@
         <p>Leach Field Area: <span class="result-value" data-value="{{ results.get('Leach Field Area', 'N/A') }}">0</span> m²</p>
         <p>Groundwater Safety: <span>{{ results.get('Groundwater Safety', 'N/A') }}</span></p>
         
-        <!-- New Tank Dimensions with animation -->
         <p>Tank Width: <span class="result-value" data-value="{{ results.get('Tank Width', 'N/A') }}">0</span> m</p>
         <p>Tank Height: <span class="result-value" data-value="{{ results.get('Tank Height', 'N/A') }}">0</span> m</p>
         <p>Tank Depth: <span class="result-value" data-value="{{ results.get('Tank Depth', 'N/A') }}">0</span> m</p>
     </div>
 
-    <!-- 3D Visualization Section -->
     <h2 class="text-center mb-4" style="font-size: 1.75rem;">3D Septic Tank Visualization</h2>
     <div id="tank-visualization" style="width: 80%; height: 400px; margin: 0 auto; background-color: #f8f9fa; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);"></div>
 </div>
 
-<!-- Inline JavaScript for Sequential Animation -->
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Function to animate counting from 0 to target value
-        function animateValue(element, targetValue) {
-            let startValue = 0;
-            let duration = 2000; // Duration in ms
-            let stepTime = Math.abs(Math.floor(duration / targetValue));
-            let increment = Math.ceil(targetValue / 100); // Smooth increment
-
-            let timer = setInterval(() => {
-                startValue += increment;
-                if (startValue >= targetValue) {
-                    startValue = targetValue; // To prevent overflow
-                    clearInterval(timer);
-                }
-                element.innerText = startValue.toFixed(2);
-            }, stepTime);
-        }
-
-        // Get all elements with the class "result-value" for sequential animation
-        const results = document.querySelectorAll('.result-value');
-        
-        // Sequential animation logic
-        let delay = 0;
-        results.forEach((result) => {
-            const targetValue = parseFloat(result.dataset.value);
-            setTimeout(() => {
-                animateValue(result, targetValue);
-            }, delay);
-            delay += 500; // Delay between each result
-        });
-    });
-</script>
-
-<!-- 3D Visualization Code with Labels -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const tankWidth = {{ results.get('Tank Width', 1) }};
@@ -94,6 +57,14 @@
         renderer.setSize(document.getElementById('tank-visualization').clientWidth, 400);
         document.getElementById('tank-visualization').appendChild(renderer.domElement);
 
+        // CSS2DRenderer for labels
+        const labelRenderer = new THREE.CSS2DRenderer();
+        labelRenderer.setSize(document.getElementById('tank-visualization').clientWidth, 400);
+        labelRenderer.domElement.style.position = 'absolute';
+        labelRenderer.domElement.style.top = '0px';
+        labelRenderer.domElement.style.pointerEvents = 'none';
+        document.getElementById('tank-visualization').appendChild(labelRenderer.domElement);
+
         const geometry = new THREE.BoxGeometry(tankWidth, tankHeight, tankDepth);
         const material = new THREE.MeshBasicMaterial({ color: 0x007bff, wireframe: true });
         const tank = new THREE.Mesh(geometry, material);
@@ -101,46 +72,37 @@
 
         camera.position.z = 5;
 
-        // Labels for dimensions
+        // Create labels with CSS2DRenderer
         const createLabel = (text, position) => {
             const div = document.createElement('div');
             div.className = 'label';
-            div.style.position = 'absolute';
             div.style.color = 'white';
             div.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
-            div.style.padding = '2px 6px';
+            div.style.padding = '4px 8px';
             div.style.borderRadius = '3px';
-            div.style.fontSize = '12px';
-            div.innerHTML = text;
-            document.body.appendChild(div);
-
-            const labelUpdate = () => {
-                const vector = position.clone().project(camera);
-                div.style.left = ((vector.x + 1) / 2 * window.innerWidth) + 'px';
-                div.style.top = ((-vector.y + 1) / 2 * window.innerHeight) + 'px';
-            };
-            return labelUpdate;
+            div.style.fontSize = '14px';
+            div.textContent = text;
+            const label = new THREE.CSS2DObject(div);
+            label.position.set(position.x, position.y, position.z);
+            return label;
         };
 
-        const labels = [
-            createLabel(`Width: ${tankWidth} m`, new THREE.Vector3(tankWidth / 2, 0, 0)),
-            createLabel(`Height: ${tankHeight} m`, new THREE.Vector3(0, tankHeight / 2, 0)),
-            createLabel(`Depth: ${tankDepth} m`, new THREE.Vector3(0, 0, tankDepth / 2))
-        ];
+        tank.add(createLabel(`Width: ${tankWidth} m`, new THREE.Vector3(tankWidth / 2, 0, 0)));
+        tank.add(createLabel(`Height: ${tankHeight} m`, new THREE.Vector3(0, tankHeight / 2, 0)));
+        tank.add(createLabel(`Depth: ${tankDepth} m`, new THREE.Vector3(0, 0, tankDepth / 2)));
 
         function animate() {
             requestAnimationFrame(animate);
             tank.rotation.y += 0.01;
 
-            // Update labels position
-            labels.forEach(update => update());
-
             renderer.render(scene, camera);
+            labelRenderer.render(scene, camera);
         }
         animate();
 
         window.addEventListener('resize', () => {
             renderer.setSize(document.getElementById('tank-visualization').clientWidth, 400);
+            labelRenderer.setSize(document.getElementById('tank-visualization').clientWidth, 400);
             camera.aspect = document.getElementById('tank-visualization').clientWidth / 400;
             camera.updateProjectionMatrix();
         });
