@@ -23,9 +23,7 @@ H2S_EMISSION_ESTIMATE = 0.1  # Hydrogen Sulfide emissions, g/person/day
 # Leach field calculations
 LEACH_FIELD_MULTIPLIER = 1.5  # Adjustment factor for leach field area
 
-# Soil Percolation Rates (example values based on soil type)
-SOIL_PERCOLATION_RATES = {
-    'sandy': 0.5,  # m³/day/m²
-    'clay': 0.2,   # m³/day/m²
-    'loam': 0.3    # m³/day/m²
-}
+# Soil Percolation Rates (liters per square meter per day)
+PERCOLATION_RATE_SANDY = 30
+PERCOLATION_RATE_LOAM = 15
+PERCOLATION_RATE_CLAY = 5
