@@ -11,29 +11,43 @@ app.secret_key = 'your_secret_key'  # Required for flash messages
 def index():
     return render_template('index.html')
 
-
 @app.route('/calculate', methods=['GET', 'POST'])
 def calculate():
     if request.method == 'POST':
-        borehole_distance = float(request.form['borehole_distance'])
+        try:
+            # Debug: Print submitted form data
+            print("Form Data:", request.form)
 
-        # Check if the borehole distance meets the minimum requirement
-        if borehole_distance < MIN_BOREHOLE_DISTANCE:
-            flash(f"Warning: Distance to borehole must be at least {MIN_BOREHOLE_DISTANCE} meters.", "warning")
-            return redirect(url_for('calculate'))  # Redirect back to the form for correction
+            # Validate and collect inputs
+            borehole_distance = float(request.form['borehole_distance'])
+            if borehole_distance < MIN_BOREHOLE_DISTANCE:
+                flash(f"Warning: Distance to borehole must be at least {MIN_BOREHOLE_DISTANCE} meters.", "warning")
+                return redirect(url_for('calculate'))
 
-        # Collect other user inputs if the distance is adequate
-        user_inputs = {
-            "household_size": int(request.form['household_size']),
-            "tank_type": request.form['tank_type'],
-            "retention_time": float(request.form['retention_time']),
-            "borehole_distance": borehole_distance,
-            "seasonal_factor": float(request.form['seasonal_factor']),
-            "sand_thickness": float(request.form['sand_thickness'])
-        }
-        results = calculate_tank_requirements(user_inputs)
-        return render_template('result.html', results=results)
-    return render_template('index.html')  # Renders the form if GET request
+            # Collect other inputs
+            user_inputs = {
+                "household_size": int(request.form['household_size']),
+                "tank_type": request.form['tank_type'],
+                "retention_time": float(request.form['retention_time']),
+                "borehole_distance": borehole_distance,
+                "seasonal_factor": float(request.form['seasonal_factor']),
+                "sand_thickness": float(request.form['sand_thickness']),
+            }
+
+            # Perform calculations
+            results = calculate_tank_requirements(user_inputs)
+
+            # Debug: Print calculated results
+            print("Calculated Results:", results)
+
+            return render_template('result.html', results=results)
+        except Exception as e:
+            # Debug: Print the error
+            print("Error in processing:", e)
+            flash(f"Error: {str(e)}", "danger")
+            return redirect(url_for('calculate'))
+    return render_template('calculate.html')
+
 
 
 @app.route('/results')
