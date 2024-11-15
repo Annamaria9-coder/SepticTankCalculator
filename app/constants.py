@@ -1,5 +1,8 @@
 # constants.py
 
+# constants.py
+MIN_BOREHOLE_DISTANCE = 30  # Minimum distance in meters
+
 # Sludge accumulation and flow constants
 SLUDGE_ACCUMULATION_RATE = 0.04  # m3 per capita per year
 FLUSH_COUNT = 5  # Flush count per person per day
