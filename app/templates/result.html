@@ -26,13 +26,14 @@
 <div class="container">
     <h1 class="text-center mt-4">Calculation Results</h1>
     <div class="results mb-5 p-3 bg-light rounded shadow-sm">
-        <p>Volume of Liquid: {{ results.get('Volume of Liquid', 'N/A') }} m³</p>
-        <p>Volume of Sludge: {{ results.get('Volume of Sludge', 'N/A') }} m³</p>
-        <p>Total Tank Volume: {{ results.get('Total Tank Volume', 'N/A') }} m³</p>
-        <p>H₂S Emissions: {{ results.get('H2S Emissions', 'N/A') }} g/day</p>
-        <p>Sand Thickness: {{ results.get('Sand Thickness', 'N/A') }} m</p>
-        <p>Leach Field Area: {{ results.get('Leach Field Area', 'N/A') }} m²</p>
-        <p>Groundwater Safety: {{ results.get('Groundwater Safety', 'N/A') }}</p>
+        <!-- Result placeholders with animation classes -->
+        <p>Volume of Liquid: <span class="result-value" data-value="{{ results.get('Volume of Liquid', 'N/A') }}">0</span> m³</p>
+        <p>Volume of Sludge: <span class="result-value" data-value="{{ results.get('Volume of Sludge', 'N/A') }}">0</span> m³</p>
+        <p>Total Tank Volume: <span class="result-value" data-value="{{ results.get('Total Tank Volume', 'N/A') }}">0</span> m³</p>
+        <p>H₂S Emissions: <span class="result-value" data-value="{{ results.get('H2S Emissions', 'N/A') }}">0</span> g/day</p>
+        <p>Sand Thickness: <span class="result-value" data-value="{{ results.get('Sand Thickness', 'N/A') }}">0</span> m</p>
+        <p>Leach Field Area: <span class="result-value" data-value="{{ results.get('Leach Field Area', 'N/A') }}">0</span> m²</p>
+        <p>Groundwater Safety: <span>{{ results.get('Groundwater Safety', 'N/A') }}</span></p>
     </div>
 
     <!-- 3D Visualization Section -->
@@ -40,39 +41,68 @@
     <div id="tank-visualization" style="width: 80%; height: 400px; margin: 0 auto; background-color: #f8f9fa; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);"></div>
 </div>
 
-<!-- Inline JavaScript for 3D Visualization -->
+<!-- Inline JavaScript for Sequential Animation -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Dimensions - Use Jinja to insert values from Flask
+        // Function to animate counting from 0 to target value
+        function animateValue(element, targetValue) {
+            let startValue = 0;
+            let duration = 2000; // Duration in ms
+            let stepTime = Math.abs(Math.floor(duration / targetValue));
+            let increment = Math.ceil(targetValue / 100); // Smooth increment
+
+            let timer = setInterval(() => {
+                startValue += increment;
+                if (startValue >= targetValue) {
+                    startValue = targetValue; // To prevent overflow
+                    clearInterval(timer);
+                }
+                element.innerText = startValue.toFixed(2);
+            }, stepTime);
+        }
+
+        // Get all elements with the class "result-value" for sequential animation
+        const results = document.querySelectorAll('.result-value');
+        
+        // Sequential animation logic
+        let delay = 0;
+        results.forEach((result) => {
+            const targetValue = parseFloat(result.dataset.value);
+            setTimeout(() => {
+                animateValue(result, targetValue);
+            }, delay);
+            delay += 500; // Delay between each result
+        });
+    });
+</script>
+
+<!-- 3D Visualization Code (unchanged) -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
         const tankWidth = {{ results.get('Tank Width', 1) }};
         const tankHeight = {{ results.get('Tank Height', 1) }};
         const tankDepth = {{ results.get('Tank Depth', 1) }};
 
-        // Initialize Three.js scene
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / 500, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(document.getElementById('tank-visualization').clientWidth, 400); // Set canvas size to match container
+        renderer.setSize(document.getElementById('tank-visualization').clientWidth, 400);
         document.getElementById('tank-visualization').appendChild(renderer.domElement);
 
-        // Create tank geometry and material
         const geometry = new THREE.BoxGeometry(tankWidth, tankHeight, tankDepth);
         const material = new THREE.MeshBasicMaterial({ color: 0x007bff, wireframe: true });
         const tank = new THREE.Mesh(geometry, material);
         scene.add(tank);
 
-        // Position camera
         camera.position.z = 5;
 
-        // Animation loop
         function animate() {
             requestAnimationFrame(animate);
-            tank.rotation.y += 0.01; // Rotate for a 3D view effect
+            tank.rotation.y += 0.01;
             renderer.render(scene, camera);
         }
         animate();
 
-        // Adjust the canvas size when the window is resized
         window.addEventListener('resize', () => {
             renderer.setSize(document.getElementById('tank-visualization').clientWidth, 400);
             camera.aspect = document.getElementById('tank-visualization').clientWidth / 400;
