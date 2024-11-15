@@ -11,28 +11,29 @@ app.secret_key = 'your_secret_key'  # Required for flash messages
 def index():
     return render_template('index.html')
 
+
 @app.route('/calculate', methods=['GET', 'POST'])
 def calculate():
     if request.method == 'POST':
         try:
-            # Debug: Print submitted form data
-            print("Form Data:", request.form)
-
-            # Validate and collect inputs
-            borehole_distance = float(request.form['borehole_distance'])
-            if borehole_distance < MIN_BOREHOLE_DISTANCE:
-                flash(f"Warning: Distance to borehole must be at least {MIN_BOREHOLE_DISTANCE} meters.", "warning")
-                return redirect(url_for('calculate'))
-
-            # Collect other inputs
+            # Retrieve user inputs from the form
             user_inputs = {
                 "household_size": int(request.form['household_size']),
                 "tank_type": request.form['tank_type'],
+                "soil_type": request.form['soil_type'],
+                "groundwater_flow": request.form['groundwater_flow'],
+                "groundwater_depth": float(request.form['groundwater_depth']),
                 "retention_time": float(request.form['retention_time']),
-                "borehole_distance": borehole_distance,
+                "borehole_distance": float(request.form['borehole_distance']),
                 "seasonal_factor": float(request.form['seasonal_factor']),
                 "sand_thickness": float(request.form['sand_thickness']),
+                "effluent_reuse": request.form['effluent_reuse']
             }
+
+            # Validate borehole distance
+            if user_inputs['borehole_distance'] < MIN_BOREHOLE_DISTANCE:
+                flash(f"Warning: Distance to borehole must be at least {MIN_BOREHOLE_DISTANCE} meters.", "warning")
+                return redirect(url_for('calculate'))
 
             # Perform calculations
             results = calculate_tank_requirements(user_inputs)
@@ -41,13 +42,15 @@ def calculate():
             print("Calculated Results:", results)
 
             return render_template('result.html', results=results)
+
         except Exception as e:
             # Debug: Print the error
-            print("Error in processing:", e)
+            print("Error during calculation:", e)
             flash(f"Error: {str(e)}", "danger")
             return redirect(url_for('calculate'))
-    return render_template('calculate.html')
 
+    # Render the input form for a GET request
+    return render_template('calculate.html')
 
 
 @app.route('/results')
