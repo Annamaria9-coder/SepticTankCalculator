@@ -26,11 +26,11 @@
 <div class="container">
     <h1>Calculation Results</h1>
     <div class="results mb-5">
-        <p>Volume of Liquid: {{ results['Volume of Liquid'] }} m³</p>
-        <p>Volume of Sludge: {{ results['Volume of Sludge'] }} m³</p>
-        <p>Total Tank Volume: {{ results['Total Tank Volume'] }} m³</p>
-        <p>H₂S Emissions: {{ results['H2S Emissions'] }} g/day</p>
-        <p>Sand Thickness: {{ results['Sand Thickness'] }} m</p>
+<p>Volume of Liquid: {{ results.get('Volume of Liquid', 'N/A') }} m³</p>
+<p>Volume of Sludge: {{ results.get('Volume of Sludge', 'N/A') }} m³</p>
+<p>Total Tank Volume: {{ results.get('Total Tank Volume', 'N/A') }} m³</p>
+<p>H₂S Emissions: {{ results.get('H2S Emissions', 'N/A') }} g/day</p>
+<p>Sand Thickness: {{ results.get('Sand Thickness', 'N/A') }} m</p>
     </div>
 
     <!-- 3D Visualization Section -->
