@@ -11,9 +11,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
     <!-- Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- FontLoader for Three.js TextGeometry -->
-    <script src="https://threejs.org/examples/jsm/loaders/FontLoader.js"></script>
-    <script src="https://threejs.org/examples/jsm/geometries/TextGeometry.js"></script>
+    <!-- Bootstrap JavaScript Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
 
@@ -102,30 +101,40 @@
 
         camera.position.z = 5;
 
-        // Load font and add text labels
-        const loader = new THREE.FontLoader();
-        loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', (font) => {
-            const addText = (text, position) => {
-                const textGeometry = new THREE.TextGeometry(text, {
-                    font: font,
-                    size: 0.2,
-                    height: 0.05,
-                });
-                const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
-                const textMesh = new THREE.Mesh(textGeometry, textMaterial);
-                textMesh.position.set(position.x, position.y, position.z);
-                scene.add(textMesh);
-            };
+        // Labels for dimensions
+        const createLabel = (text, position) => {
+            const div = document.createElement('div');
+            div.className = 'label';
+            div.style.position = 'absolute';
+            div.style.color = 'white';
+            div.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+            div.style.padding = '2px 6px';
+            div.style.borderRadius = '3px';
+            div.style.fontSize = '12px';
+            div.innerHTML = text;
+            document.body.appendChild(div);
 
-            // Add labels for Width, Height, Depth
-            addText(`Width: ${tankWidth} m`, { x: tankWidth / 2, y: -tankHeight / 2 - 0.3, z: 0 });
-            addText(`Height: ${tankHeight} m`, { x: -tankWidth / 2 - 0.3, y: tankHeight / 2, z: 0 });
-            addText(`Depth: ${tankDepth} m`, { x: 0, y: -tankHeight / 2 - 0.3, z: -tankDepth / 2 });
-        });
+            const labelUpdate = () => {
+                const vector = position.clone().project(camera);
+                div.style.left = ((vector.x + 1) / 2 * window.innerWidth) + 'px';
+                div.style.top = ((-vector.y + 1) / 2 * window.innerHeight) + 'px';
+            };
+            return labelUpdate;
+        };
+
+        const labels = [
+            createLabel(`Width: ${tankWidth} m`, new THREE.Vector3(tankWidth / 2, 0, 0)),
+            createLabel(`Height: ${tankHeight} m`, new THREE.Vector3(0, tankHeight / 2, 0)),
+            createLabel(`Depth: ${tankDepth} m`, new THREE.Vector3(0, 0, tankDepth / 2))
+        ];
 
         function animate() {
             requestAnimationFrame(animate);
             tank.rotation.y += 0.01;
+
+            // Update labels position
+            labels.forEach(update => update());
+
             renderer.render(scene, camera);
         }
         animate();
