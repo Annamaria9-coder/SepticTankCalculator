@@ -20,14 +20,18 @@ def calculate():
                 flash(f"Warning: Distance to borehole must be at least {MIN_BOREHOLE_DISTANCE} meters.", "warning")
                 return redirect(url_for('calculate'))
 
-            # Collect other inputs
+            # Collect other inputs, including additional fields
             user_inputs = {
                 "household_size": int(request.form['household_size']),
                 "tank_type": request.form['tank_type'],
+                "soil_type": request.form['soil_type'],  # Added soil_type
+                "groundwater_flow": request.form['groundwater_flow'],  # Added groundwater_flow
+                "groundwater_depth": float(request.form['groundwater_depth']),  # Added groundwater_depth
                 "retention_time": float(request.form['retention_time']),
                 "borehole_distance": borehole_distance,
                 "seasonal_factor": float(request.form['seasonal_factor']),
                 "sand_thickness": float(request.form['sand_thickness']),
+                "effluent_reuse": request.form['effluent_reuse'],  # Added effluent_reuse
             }
 
             # Perform calculations
