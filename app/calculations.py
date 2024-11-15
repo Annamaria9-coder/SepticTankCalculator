@@ -56,6 +56,17 @@ def calculate_groundwater_safety(depth, flow_direction):
         return "Risk: Potential contamination downstream."
     return "Safe"
 
+def calculate_tank_dimensions(total_volume):
+    """
+    Calculate the dimensions (width, height, depth) of the septic tank
+    based on the total volume. Placeholder logic for demonstration.
+    """
+    # Placeholder logic, please update with real calculations if available
+    tank_width = 2.5  # Adjust based on total_volume or other parameters
+    tank_height = 1.8  # Adjust based on total_volume or other parameters
+    tank_depth = 4.0  # Adjust based on total_volume or other parameters
+    return tank_width, tank_height, tank_depth
+
 # Combine all calculations for final output
 def calculate_tank_requirements(user_inputs):
     """Perform all calculations and return a summary."""
@@ -72,6 +83,9 @@ def calculate_tank_requirements(user_inputs):
     leach_field_area = calculate_leach_field_area(total_volume, soil_type)
     groundwater_safety = calculate_groundwater_safety(groundwater_depth, groundwater_flow)
 
+    # Calculate tank dimensions for 3D visualization
+    tank_width, tank_height, tank_depth = calculate_tank_dimensions(total_volume)
+
     return {
         "Volume of Liquid": volume_liquid,
         "Volume of Sludge": volume_sludge,
@@ -80,4 +94,7 @@ def calculate_tank_requirements(user_inputs):
         "Sand Thickness": sand_thickness,
         "Leach Field Area": leach_field_area,
         "Groundwater Safety": groundwater_safety,
+        "Tank Width": tank_width,
+        "Tank Height": tank_height,
+        "Tank Depth": tank_depth,
     }
