@@ -17,7 +17,7 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
-    flex-direction: column; /* Changed for better stacking on mobile */
+    flex-direction: column; /* Changed for stacking on mobile */
     background-color: #f8f9fa;
 }
 
@@ -30,12 +30,33 @@ body {
     display: flex;
     flex-direction: column;
     padding-top: 20px;
-    position: fixed; /* Fixed positioning for mobile responsiveness */
+    position: fixed;
     top: 0;
     left: 0;
-    transition: width 0.3s ease; /* Smooth transition for collapse */
+    z-index: 1000; /* Ensure it overlays content */
+    transition: transform 0.3s ease; /* Smooth toggle */
 }
 
+/* Hidden sidebar for mobile */
+.sidebar.hidden {
+    transform: translateX(-250px);
+}
+
+/* Toggle button for sidebar */
+.sidebar-toggle {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1001; /* Above the sidebar */
+}
+
+/* Sidebar content */
 .sidebar h2, .sidebar a {
     font-weight: 600;
     color: white;
@@ -91,51 +112,31 @@ button.btn-primary:hover {
     }
 
     .sidebar {
-        width: 100%; /* Full width on small screens */
-        height: auto; /* Adjust height */
-        flex-direction: row; /* Display as a row for mobile */
-        padding: 10px;
-        justify-content: space-around; /* Space links evenly */
+        width: 250px; /* Sidebar width remains same */
+        height: 100vh; /* Full-screen height */
+        transform: translateX(-250px); /* Initially hidden */
     }
 
-    .sidebar h2 {
-        display: none; /* Hide title on smaller screens */
-    }
-
-    .sidebar a {
-        padding: 10px 15px;
-        font-size: 0.9rem; /* Slightly smaller font for links */
+    .sidebar.visible {
+        transform: translateX(0); /* Show on toggle */
     }
 
     .container {
         margin-left: 0; /* Remove sidebar offset for mobile */
-        margin-top: 20px; /* Add spacing below the collapsed sidebar */
-        padding: 15px;
-    }
-
-    form, .results {
         padding: 15px;
     }
 
     h1 {
-        font-size: 1.5rem; /* Adjust font size for smaller screens */
+        font-size: 1.5rem;
+    }
+
+    form, .results {
+        padding: 15px;
     }
 }
 
 @media (max-width: 480px) {
-    .sidebar a {
-        font-size: 0.8rem; /* Further reduce link font size */
-    }
-
     h1 {
-        font-size: 1.2rem; /* Adjust title font size */
-    }
-
-    .container {
-        padding: 10px;
-    }
-
-    form, .results {
-        padding: 10px;
+        font-size: 1.2rem;
     }
 }
