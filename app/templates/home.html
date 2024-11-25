@@ -10,15 +10,13 @@
 </head>
 <body>
 
-<!-- Responsive Sidebar -->
-<div class="d-flex flex-column flex-shrink-0 p-3 bg-primary text-white position-fixed" id="sidebar" style="width: 250px; height: 100vh;">
-    <button class="btn btn-light d-md-none mb-3" id="toggle-sidebar">Menu</button>
-    <h2 class="text-white">Septic Calculator</h2>
-    <nav class="nav nav-pills flex-column">
-        <a href="/" class="nav-link text-white">Home</a>
-        <a href="/calculate" class="nav-link text-white">Calculator</a>
-        <a href="#" class="nav-link text-white">Results</a>
-    </nav>
+<!-- Sidebar -->
+<div class="sidebar d-flex flex-column flex-shrink-0 p-3 bg-light" id="responsive-sidebar">
+    <button class="btn btn-primary d-md-none mb-3" id="toggle-sidebar">Menu</button>
+    <h2 class="sidebar-title">Septic Calculator</h2>
+    <a href="/" class="nav-link">Home</a>
+    <a href="/calculate" class="nav-link">Calculator</a>
+    <a href="#" class="nav-link">Results</a>
 </div>
 
 <!-- Main Content -->
@@ -40,11 +38,11 @@
 <!-- JavaScript for Sidebar Toggle -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const sidebar = document.getElementById('sidebar');
+        const sidebar = document.getElementById('responsive-sidebar');
         const toggleButton = document.getElementById('toggle-sidebar');
 
         toggleButton.addEventListener('click', () => {
-            sidebar.classList.toggle('d-none');
+            sidebar.classList.toggle('collapsed');
         });
     });
 </script>
