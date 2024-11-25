@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Septic Tank Calculator</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <!-- Bootstrap CSS for blue-themed styling -->
@@ -14,15 +15,17 @@
 
 <body>
 
-<div class="sidebar">
+<!-- Responsive Sidebar -->
+<div class="sidebar d-flex flex-column flex-shrink-0 p-3 bg-light">
+    <button class="btn btn-primary d-md-none mb-3" id="toggle-sidebar">Menu</button>
     <h2>Septic Calculator</h2>
-    <a href="/">Home</a>
-    <a href="/calculate">Calculator</a>
-    <a href="#">Results</a> <!-- Removed direct link to results to prevent navigation issues -->
+    <a href="/" class="nav-link">Home</a>
+    <a href="/calculate" class="nav-link">Calculator</a>
+    <a href="#" class="nav-link">Results</a> <!-- Prevent direct navigation -->
 </div>
 
 <div class="container">
-    <h1>Septic Tank Design Tool</h1>
+    <h1 class="text-center mt-4">Septic Tank Design Tool</h1>
     <form action="/calculate" method="post" class="p-4 bg-light rounded shadow">
         <div class="row g-3">
             <div class="col-md-4">
@@ -59,8 +62,17 @@
     </form>
 </div>
 
-<!-- Add this at the bottom of index.html and result.html -->
-<script src="{{ url_for('static', filename='script.js') }}"></script>
+<!-- JavaScript for Sidebar Toggle -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const sidebar = document.querySelector('.sidebar');
+        const toggleButton = document.getElementById('toggle-sidebar');
+
+        toggleButton.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+        });
+    });
+</script>
 
 </body>
 </html>
