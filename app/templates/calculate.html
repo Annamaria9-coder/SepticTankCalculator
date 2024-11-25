@@ -10,11 +10,13 @@
 </head>
 <body>
 
-<div class="sidebar">
+<!-- Responsive Sidebar -->
+<div class="sidebar d-flex flex-column flex-shrink-0 p-3 bg-light">
+    <button class="btn btn-primary d-md-none mb-3" id="toggle-sidebar">Menu</button>
     <h2>Septic Calculator</h2>
-    <a href="/">Home</a>
-    <a href="/calculate">Calculator</a>
-    <a href="#">Results</a> <!-- Set to "#" to prevent direct access -->
+    <a href="/" class="nav-link">Home</a>
+    <a href="/calculate" class="nav-link">Calculator</a>
+    <a href="#" class="nav-link">Results</a> <!-- Prevent direct navigation -->
 </div>
 
 <div class="container mt-4">
@@ -87,6 +89,18 @@
         <button type="submit" class="btn btn-primary mt-3">Calculate</button>
     </form>
 </div>
+
+<!-- JavaScript for Sidebar Toggle -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const sidebar = document.querySelector('.sidebar');
+        const toggleButton = document.getElementById('toggle-sidebar');
+
+        toggleButton.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+        });
+    });
+</script>
 
 </body>
 </html>
