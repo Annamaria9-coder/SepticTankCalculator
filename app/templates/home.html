@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to Septic Tank Calculator</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <!-- Bootstrap CSS for styling -->
@@ -30,6 +31,26 @@
         </div>
     </div>
 </div>
+
+<!-- Add mobile responsive styles for the sidebar -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Mobile-friendly sidebar toggle
+        const sidebar = document.querySelector('.sidebar');
+        const container = document.querySelector('.container');
+
+        // Add a toggle button for small screens
+        const toggleButton = document.createElement('button');
+        toggleButton.textContent = '☰ Menu';
+        toggleButton.classList.add('btn', 'btn-primary', 'd-md-none', 'mb-3');
+        toggleButton.style.margin = '20px';
+        document.body.insertBefore(toggleButton, sidebar);
+
+        toggleButton.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+    });
+</script>
 
 </body>
 </html>
