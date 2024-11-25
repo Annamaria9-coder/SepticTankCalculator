@@ -33,6 +33,7 @@ body {
     position: fixed; /* Fixed positioning for mobile responsiveness */
     top: 0;
     left: 0;
+    transition: width 0.3s ease; /* Smooth transition for collapse */
 }
 
 .sidebar h2, .sidebar a {
@@ -128,5 +129,13 @@ button.btn-primary:hover {
 
     h1 {
         font-size: 1.2rem; /* Adjust title font size */
+    }
+
+    .container {
+        padding: 10px;
+    }
+
+    form, .results {
+        padding: 10px;
     }
 }
