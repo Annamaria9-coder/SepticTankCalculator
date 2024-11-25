@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to Septic Tank Calculator</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <!-- Bootstrap CSS for styling -->
@@ -10,17 +9,14 @@
 </head>
 <body>
 
-<!-- Sidebar -->
-<div class="sidebar d-flex flex-column flex-shrink-0 p-3 bg-light" id="responsive-sidebar">
-    <button class="btn btn-primary d-md-none mb-3" id="toggle-sidebar">Menu</button>
-    <h2 class="sidebar-title">Septic Calculator</h2>
-    <a href="/" class="nav-link">Home</a>
-    <a href="/calculate" class="nav-link">Calculator</a>
-    <a href="#" class="nav-link">Results</a>
+<div class="sidebar">
+    <h2>Septic Calculator</h2>
+    <a href="/">Home</a>
+    <a href="/calculate">Calculator</a>
+    <a href="#">Results</a>
 </div>
 
-<!-- Main Content -->
-<div class="container" style="margin-left: 250px; padding-top: 20px;">
+<div class="container mt-5">
     <div class="p-5 bg-light rounded-3 shadow-sm">
         <h1 class="text-center mb-4" style="font-weight: bold; color: #007bff;">Welcome to the Global Communities' Septic Tank Calculator</h1>
         <p class="text-center fs-5">
@@ -34,18 +30,6 @@
         </div>
     </div>
 </div>
-
-<!-- JavaScript for Sidebar Toggle -->
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const sidebar = document.getElementById('responsive-sidebar');
-        const toggleButton = document.getElementById('toggle-sidebar');
-
-        toggleButton.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
-        });
-    });
-</script>
 
 </body>
 </html>

@@ -17,18 +17,17 @@
 </head>
 <body>
 
-<!-- Sidebar -->
-<div class="sidebar d-flex flex-column flex-shrink-0 p-3 bg-light">
-    <button class="btn btn-primary d-md-none mb-3" id="toggle-sidebar">Menu</button>
+<div class="sidebar">
     <h2>Septic Calculator</h2>
-    <a href="/" class="nav-link">Home</a>
-    <a href="/calculate" class="nav-link">Calculator</a>
-    <a href="#" class="nav-link">Results</a>
+    <a href="/">Home</a>
+    <a href="/calculate">Calculator</a>
+    <a href="#">Results</a> <!-- Set to "#" to prevent direct access -->
 </div>
 
-<div class="container mt-4">
-    <h1 class="text-center mb-4">Calculation Results</h1>
+<div class="container">
+    <h1 class="text-center mt-4">Calculation Results</h1>
     <div class="results mb-5 p-3 bg-light rounded shadow-sm">
+        <!-- Result placeholders with animation classes -->
         <p>Volume of Liquid: <span class="result-value" data-value="{{ results.get('Volume of Liquid', 'N/A') }}">0</span> m³</p>
         <p>Volume of Sludge: <span class="result-value" data-value="{{ results.get('Volume of Sludge', 'N/A') }}">0</span> m³</p>
         <p>Total Tank Volume: <span class="result-value" data-value="{{ results.get('Total Tank Volume', 'N/A') }}">0</span> m³</p>
@@ -36,56 +35,54 @@
         <p>Sand Thickness: <span class="result-value" data-value="{{ results.get('Sand Thickness', 'N/A') }}">0</span> m</p>
         <p>Leach Field Area: <span class="result-value" data-value="{{ results.get('Leach Field Area', 'N/A') }}">0</span> m²</p>
         <p>Groundwater Safety: <span>{{ results.get('Groundwater Safety', 'N/A') }}</span></p>
+        
+        <!-- New Tank Dimensions with animation -->
         <p>Tank Width: <span class="result-value" data-value="{{ results.get('Tank Width', 'N/A') }}">0</span> m</p>
         <p>Tank Height: <span class="result-value" data-value="{{ results.get('Tank Height', 'N/A') }}">0</span> m</p>
         <p>Tank Depth: <span class="result-value" data-value="{{ results.get('Tank Depth', 'N/A') }}">0</span> m</p>
     </div>
 
-    <!-- 3D Visualization -->
-    <h2 class="text-center mb-4">3D Septic Tank Visualization</h2>
-    <div id="tank-visualization" style="width: 100%; height: 400px; margin: 0 auto; background-color: #f8f9fa; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);"></div>
+    <!-- 3D Visualization Section -->
+    <h2 class="text-center mb-4" style="font-size: 1.75rem;">3D Septic Tank Visualization</h2>
+    <div id="tank-visualization" style="width: 80%; height: 400px; margin: 0 auto; background-color: #f8f9fa; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);"></div>
 </div>
 
-<!-- Inline JavaScript for Animation -->
+<!-- Inline JavaScript for Sequential Animation -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Animate counting values
+        // Function to animate counting from 0 to target value
         function animateValue(element, targetValue) {
             let startValue = 0;
-            let duration = 2000;
+            let duration = 2000; // Duration in ms
             let stepTime = Math.abs(Math.floor(duration / targetValue));
-            let increment = Math.ceil(targetValue / 100);
+            let increment = Math.ceil(targetValue / 100); // Smooth increment
 
             let timer = setInterval(() => {
                 startValue += increment;
                 if (startValue >= targetValue) {
-                    startValue = targetValue;
+                    startValue = targetValue; // To prevent overflow
                     clearInterval(timer);
                 }
                 element.innerText = startValue.toFixed(2);
             }, stepTime);
         }
 
+        // Get all elements with the class "result-value" for sequential animation
         const results = document.querySelectorAll('.result-value');
+        
+        // Sequential animation logic
         let delay = 0;
         results.forEach((result) => {
             const targetValue = parseFloat(result.dataset.value);
             setTimeout(() => {
                 animateValue(result, targetValue);
             }, delay);
-            delay += 500;
-        });
-
-        // Sidebar toggle for mobile
-        const sidebar = document.querySelector('.sidebar');
-        const toggleButton = document.getElementById('toggle-sidebar');
-        toggleButton.addEventListener('click', () => {
-            sidebar.classList.toggle('hidden');
+            delay += 500; // Delay between each result
         });
     });
 </script>
 
-<!-- 3D Visualization with Labels -->
+<!-- 3D Visualization Code with Labels -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const tankWidth = {{ results.get('Tank Width', 1) }};
@@ -105,13 +102,14 @@
 
         camera.position.z = 5;
 
+        // Load font and add text labels
         const loader = new THREE.FontLoader();
         loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', (font) => {
             const addText = (text, position) => {
                 const textGeometry = new THREE.TextGeometry(text, {
                     font: font,
-                    size: 0.15,
-                    height: 0.01,
+                    size: 0.2,
+                    height: 0.05,
                 });
                 const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
                 const textMesh = new THREE.Mesh(textGeometry, textMaterial);
@@ -119,9 +117,10 @@
                 scene.add(textMesh);
             };
 
-            addText(`Width: ${tankWidth}m`, { x: tankWidth / 2, y: -tankHeight / 2 - 0.4, z: 0 });
-            addText(`Height: ${tankHeight}m`, { x: -tankWidth / 2 - 0.4, y: tankHeight / 2, z: 0 });
-            addText(`Depth: ${tankDepth}m`, { x: 0, y: -tankHeight / 2 - 0.4, z: -tankDepth / 2 });
+            // Add labels for Width, Height, Depth
+            addText(`Width: ${tankWidth} m`, { x: tankWidth / 2, y: -tankHeight / 2 - 0.3, z: 0 });
+            addText(`Height: ${tankHeight} m`, { x: -tankWidth / 2 - 0.3, y: tankHeight / 2, z: 0 });
+            addText(`Depth: ${tankDepth} m`, { x: 0, y: -tankHeight / 2 - 0.3, z: -tankDepth / 2 });
         });
 
         function animate() {
@@ -138,6 +137,9 @@
         });
     });
 </script>
+
+<!-- Additional JavaScript for sidebar animation -->
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 
 </body>
 </html>

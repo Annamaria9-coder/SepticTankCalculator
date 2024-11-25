@@ -10,21 +10,16 @@
 </head>
 <body>
 
-<!-- Responsive Sidebar -->
-<div class="d-flex flex-column flex-shrink-0 p-3 bg-primary text-white position-fixed" id="sidebar" style="width: 250px; height: 100vh;">
-    <button class="btn btn-light d-md-none mb-3" id="toggle-sidebar">Menu</button>
-    <h2 class="text-white">Septic Calculator</h2>
-    <nav class="nav nav-pills flex-column">
-        <a href="/" class="nav-link text-white">Home</a>
-        <a href="/calculate" class="nav-link text-white">Calculator</a>
-        <a href="#" class="nav-link text-white">Results</a>
-    </nav>
+<div class="sidebar">
+    <h2>Septic Calculator</h2>
+    <a href="/">Home</a>
+    <a href="/calculate">Calculator</a>
+    <a href="#">Results</a> <!-- Set to "#" to prevent direct access -->
 </div>
 
-<!-- Main Content -->
-<div class="container" style="margin-left: 250px; padding-top: 20px;">
+<div class="container mt-4">
     <h1 class="text-center mb-4">Septic Tank Input Parameters</h1>
-
+    
     <!-- Display warning flash messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -35,99 +30,63 @@
     {% endwith %}
 
     <form action="/calculate" method="post">
-        <div class="row g-3">
-            <!-- Household Size -->
-            <div class="col-md-6">
-                <label for="household_size">Household Size (Number of people):</label>
-                <input type="number" id="household_size" name="household_size" class="form-control" required>
-            </div>
+        <!-- Household Size -->
+        <label for="household_size">Household Size (Number of people):</label>
+        <input type="number" id="household_size" name="household_size" class="form-control" required>
+        
+        <!-- Tank Type -->
+        <label for="tank_type">Tank Type:</label>
+        <select id="tank_type" name="tank_type" class="form-select" required>
+            <option value="3">3-Chambered Tank</option>
+            <option value="4">4-Chambered Tank</option>
+        </select>
+        
+        <!-- Soil Type -->
+        <label for="soil_type">Soil Type:</label>
+        <select id="soil_type" name="soil_type" class="form-select" required>
+            <option value="sandy">Sandy</option>
+            <option value="clay">Clay</option>
+            <option value="loam">Loam</option>
+        </select>
 
-            <!-- Tank Type -->
-            <div class="col-md-6">
-                <label for="tank_type">Tank Type:</label>
-                <select id="tank_type" name="tank_type" class="form-select" required>
-                    <option value="3">3-Chambered Tank</option>
-                    <option value="4">4-Chambered Tank</option>
-                </select>
-            </div>
+        <!-- Groundwater Flow Direction -->
+        <label for="groundwater_flow">Groundwater Flow Direction:</label>
+        <select id="groundwater_flow" name="groundwater_flow" class="form-select" required>
+            <option value="upstream">Upstream</option>
+            <option value="downstream">Downstream</option>
+        </select>
+        
+        <!-- Groundwater Depth -->
+        <label for="groundwater_depth">Groundwater Depth (meters):</label>
+        <input type="number" id="groundwater_depth" name="groundwater_depth" class="form-control" required>
+        
+        <!-- Retention Time -->
+        <label for="retention_time">Retention Time (days):</label>
+        <input type="number" id="retention_time" name="retention_time" class="form-control" required>
+        
+        <!-- Borehole Distance -->
+        <label for="borehole_distance">Distance to Borehole (m):</label>
+        <input type="number" id="borehole_distance" name="borehole_distance" class="form-control" required>
+        
+        <!-- Seasonal Factor -->
+        <label for="seasonal_factor">Seasonal Factor:</label>
+        <input type="number" id="seasonal_factor" name="seasonal_factor" class="form-control" required>
+        
+        <!-- Sand Thickness -->
+        <label for="sand_thickness">Sand Thickness (m):</label>
+        <input type="number" id="sand_thickness" name="sand_thickness" class="form-control" required>
 
-            <!-- Soil Type -->
-            <div class="col-md-6">
-                <label for="soil_type">Soil Type:</label>
-                <select id="soil_type" name="soil_type" class="form-select" required>
-                    <option value="sandy">Sandy</option>
-                    <option value="clay">Clay</option>
-                    <option value="loam">Loam</option>
-                </select>
-            </div>
-
-            <!-- Groundwater Flow Direction -->
-            <div class="col-md-6">
-                <label for="groundwater_flow">Groundwater Flow Direction:</label>
-                <select id="groundwater_flow" name="groundwater_flow" class="form-select" required>
-                    <option value="upstream">Upstream</option>
-                    <option value="downstream">Downstream</option>
-                </select>
-            </div>
-
-            <!-- Groundwater Depth -->
-            <div class="col-md-6">
-                <label for="groundwater_depth">Groundwater Depth (meters):</label>
-                <input type="number" id="groundwater_depth" name="groundwater_depth" class="form-control" required>
-            </div>
-
-            <!-- Retention Time -->
-            <div class="col-md-6">
-                <label for="retention_time">Retention Time (days):</label>
-                <input type="number" id="retention_time" name="retention_time" class="form-control" required>
-            </div>
-
-            <!-- Borehole Distance -->
-            <div class="col-md-6">
-                <label for="borehole_distance">Distance to Borehole (m):</label>
-                <input type="number" id="borehole_distance" name="borehole_distance" class="form-control" required>
-            </div>
-
-            <!-- Seasonal Factor -->
-            <div class="col-md-6">
-                <label for="seasonal_factor">Seasonal Factor:</label>
-                <input type="number" id="seasonal_factor" name="seasonal_factor" class="form-control" required>
-            </div>
-
-            <!-- Sand Thickness -->
-            <div class="col-md-6">
-                <label for="sand_thickness">Sand Thickness (m):</label>
-                <input type="number" id="sand_thickness" name="sand_thickness" class="form-control" required>
-            </div>
-
-            <!-- Effluent Reuse -->
-            <div class="col-md-6">
-                <label for="effluent_reuse">Effluent Reuse:</label>
-                <select id="effluent_reuse" name="effluent_reuse" class="form-select" required>
-                    <option value="yes">Yes</option>
-                    <option value="no">No</option>
-                </select>
-            </div>
-
-            <!-- Submit Button -->
-            <div class="col-12 text-end">
-                <button type="submit" class="btn btn-primary mt-3">Calculate</button>
-            </div>
-        </div>
+        <!-- Effluent Reuse -->
+        <label for="effluent_reuse">Effluent Reuse:</label>
+        <select id="effluent_reuse" name="effluent_reuse" class="form-select" required>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+        </select>
+        
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary mt-3">Calculate</button>
     </form>
 </div>
-
-<!-- JavaScript for Sidebar Toggle -->
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const sidebar = document.getElementById('sidebar');
-        const toggleButton = document.getElementById('toggle-sidebar');
-
-        toggleButton.addEventListener('click', () => {
-            sidebar.classList.toggle('d-none');
-        });
-    });
-</script>
 
 </body>
 </html>
