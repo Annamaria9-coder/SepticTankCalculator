@@ -25,7 +25,14 @@ body {
     transition: transform 0.3s ease-in-out;
 }
 
-.sidebar h2, .sidebar a {
+.sidebar h2 {
+    padding: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+}
+
+.sidebar a {
     padding: 15px 20px;
     text-decoration: none;
     color: white;
@@ -58,7 +65,7 @@ body {
     transform: translateX(-100%);
 }
 
-/* Content */
+/* Main Content */
 .container {
     margin-left: 250px;
     padding: 20px;
