@@ -1,7 +1,9 @@
 // script.js
-document.querySelectorAll('.sidebar a').forEach(link => {
-    link.addEventListener('click', () => {
-        link.classList.add('active');
-        setTimeout(() => link.classList.remove('active'), 200);
+document.addEventListener('DOMContentLoaded', () => {
+    const sidebar = document.querySelector('.sidebar');
+    const toggleButton = document.getElementById('toggle-sidebar');
+
+    toggleButton.addEventListener('click', () => {
+        sidebar.classList.toggle('visible');
     });
 });
