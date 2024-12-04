@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Septic Tank Calculator</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <!-- Bootstrap CSS for blue-themed styling -->
@@ -14,11 +15,14 @@
 
 <body>
 
-<div class="sidebar">
+<!-- Sidebar Toggle Button (visible on mobile) -->
+<button class="sidebar-toggle d-md-none">☰ Menu</button>
+
+<div class="sidebar hidden">
     <h2>Septic Calculator</h2>
     <a href="/">Home</a>
     <a href="/calculate">Calculator</a>
-    <a href="#">Results</a> <!-- Removed direct link to results to prevent navigation issues -->
+    <a href="#">Results</a> <!-- Prevent direct navigation -->
 </div>
 
 <div class="container">
@@ -58,6 +62,18 @@
         </div>
     </form>
 </div>
+
+<!-- JavaScript for Sidebar Toggle -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const sidebar = document.querySelector('.sidebar');
+        const toggleButton = document.querySelector('.sidebar-toggle');
+
+        toggleButton.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+        });
+    });
+</script>
 
 <!-- Add this at the bottom of index.html and result.html -->
 <script src="{{ url_for('static', filename='script.js') }}"></script>
