@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Septic Tank Calculator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- Bootstrap CSS for blue-themed styling -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
+    <!-- Bootstrap JavaScript Bundle for interactivity -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>Septic Calculator</h2>
+    <a href="/">Home</a>
+    <a href="/calculate">Calculator</a>
+    <a href="#">Results</a> <!-- Removed direct link to results to prevent navigation issues -->
+</div>
+
+<div class="container">
+    <h1>Septic Tank Design Tool</h1>
+    <form action="/calculate" method="post" class="p-4 bg-light rounded shadow">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label for="household_size" class="form-label">Household Size:</label>
+                <input type="number" id="household_size" name="household_size" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+                <label for="tank_type" class="form-label">Tank Type:</label>
+                <select id="tank_type" name="tank_type" class="form-select" required>
+                    <option value="3">3-Chambered Tank</option>
+                    <option value="4">4-Chambered Tank</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="retention_time" class="form-label">Retention Time (days):</label>
+                <input type="number" id="retention_time" name="retention_time" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+                <label for="borehole_distance" class="form-label">Distance to Borehole (m):</label>
+                <input type="number" id="borehole_distance" name="borehole_distance" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+                <label for="seasonal_factor" class="form-label">Seasonal Factor:</label>
+                <input type="number" id="seasonal_factor" name="seasonal_factor" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+                <label for="sand_thickness" class="form-label">Sand Thickness (m):</label>
+                <input type="number" id="sand_thickness" name="sand_thickness" class="form-control" required>
+            </div>
+            <div class="col-12 text-end">
+                <button type="submit" class="btn btn-primary mt-3">Calculate</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Add this at the bottom of index.html and result.html -->
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
