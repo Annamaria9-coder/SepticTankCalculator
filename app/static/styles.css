@@ -1,99 +1,77 @@
-/* Global styles */
+/* Global Styles */
 body, h1, h2, h3, h4, h5, h6, p {
     font-family: 'Poppins', sans-serif;
     color: #003366;
-}
-
-h1, h2, h3 {
-    font-weight: 600;
-}
-
-p {
-    font-weight: 400;
-    color: #333;
-}
-
-body {
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column; /* Changed for stacking on mobile */
-    background-color: #f8f9fa;
 }
 
-/* Sidebar styling */
+/* Sidebar */
 .sidebar {
     width: 250px;
     background-color: #007bff;
     color: white;
     height: 100vh;
-    display: flex;
-    flex-direction: column;
-    padding-top: 20px;
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1000; /* Ensure it overlays content */
-    transition: transform 0.3s ease; /* Smooth toggle */
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
 }
 
-/* Hidden sidebar for mobile */
-.sidebar.hidden {
-    transform: translateX(-250px);
-}
-
-/* Toggle button for sidebar */
-.sidebar-toggle {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    background-color: #007bff;
-    border: none;
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    z-index: 1001; /* Above the sidebar */
-}
-
-/* Sidebar content */
 .sidebar h2, .sidebar a {
-    font-weight: 600;
-    color: white;
-}
-
-.sidebar h2 {
-    padding: 0 20px;
-    margin-bottom: 10px;
-}
-
-.sidebar a {
     padding: 15px 20px;
     text-decoration: none;
-    display: block;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
 }
 
 .sidebar a:hover {
     background-color: #0056b3;
 }
 
-/* Content container */
+/* Responsive Sidebar Toggle */
+.sidebar.hidden {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+}
+
+#toggle-sidebar {
+    display: none;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    z-index: 20;
+}
+
+/* Content */
 .container {
-    flex: 1;
+    margin-left: 250px;
     padding: 20px;
-    margin-left: 250px; /* Offset to account for sidebar */
     background-color: #f8f9fa;
 }
 
 h1 {
     color: #007bff;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
+/* Forms */
 form, .results {
     background: white;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 20px auto;
+    max-width: 800px;
 }
 
 button.btn-primary {
@@ -105,38 +83,33 @@ button.btn-primary:hover {
     background-color: #0056b3;
 }
 
-/* Responsive design */
+/* 3D Visualization */
+#tank-visualization {
+    width: 100%;
+    height: 400px;
+    margin: 20px auto;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
-    body {
-        flex-direction: column;
+    #toggle-sidebar {
+        display: block;
     }
 
     .sidebar {
-        width: 250px; /* Sidebar width remains same */
-        height: 100vh; /* Full-screen height */
-        transform: translateX(-250px); /* Initially hidden */
+        width: 200px;
+        transform: translateX(-100%);
     }
 
     .sidebar.visible {
-        transform: translateX(0); /* Show on toggle */
+        transform: translateX(0);
     }
 
     .container {
-        margin-left: 0; /* Remove sidebar offset for mobile */
+        margin-left: 0;
         padding: 15px;
-    }
-
-    h1 {
-        font-size: 1.5rem;
-    }
-
-    form, .results {
-        padding: 15px;
-    }
-}
-
-@media (max-width: 480px) {
-    h1 {
-        font-size: 1.2rem;
     }
 }
