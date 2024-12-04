@@ -10,12 +10,16 @@
 </head>
 <body>
 
+<!-- Sidebar -->
 <div class="sidebar">
     <h2>Septic Calculator</h2>
     <a href="/">Home</a>
     <a href="/calculate">Calculator</a>
-    <a href="#">Results</a> <!-- Set to "#" to prevent direct access -->
+    <a href="#">Results</a>
 </div>
+
+<!-- Toggle Button for Mobile Sidebar -->
+<button class="sidebar-toggle">Menu</button>
 
 <div class="container mt-4">
     <h1 class="text-center mb-4">Septic Tank Input Parameters</h1>
@@ -87,6 +91,18 @@
         <button type="submit" class="btn btn-primary mt-3">Calculate</button>
     </form>
 </div>
+
+<!-- Add JavaScript for Sidebar Toggle -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const sidebar = document.querySelector('.sidebar');
+        const toggleButton = document.querySelector('.sidebar-toggle');
+
+        toggleButton.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+        });
+    });
+</script>
 
 </body>
 </html>
