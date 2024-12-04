@@ -8,19 +8,24 @@ app.secret_key = 'your_secret_key'  # Required for flash messages
 
 @app.route('/')
 def index():
-    return render_template('home.html')  # Render the new home page
+    """Render the home page."""
+    return render_template('home.html')
 
 @app.route('/calculate', methods=['GET', 'POST'])
 def calculate():
+    """Handle GET and POST requests for the calculation page."""
     if request.method == 'POST':
         try:
             # Validate and collect inputs
             borehole_distance = float(request.form['borehole_distance'])
             if borehole_distance < MIN_BOREHOLE_DISTANCE:
-                flash(f"Warning: Distance to borehole must be at least {MIN_BOREHOLE_DISTANCE} meters.", "warning")
+                flash(
+                    f"Warning: Distance to borehole must be at least {MIN_BOREHOLE_DISTANCE} meters.",
+                    "warning"
+                )
                 return redirect(url_for('calculate'))
 
-            # Collect other inputs, including additional fields
+            # Collect user inputs from the form
             user_inputs = {
                 "household_size": int(request.form['household_size']),
                 "tank_type": request.form['tank_type'],
@@ -37,11 +42,18 @@ def calculate():
             # Perform calculations
             results = calculate_tank_requirements(user_inputs)
 
+            # Render the results page with calculated data
             return render_template('result.html', results=results)
-        except Exception as e:
-            flash(f"Error: {str(e)}", "danger")
+
+        except ValueError:
+            flash("Invalid input: Please enter valid numerical values.", "danger")
             return redirect(url_for('calculate'))
-    return render_template('calculate.html')  # Render the form if GET request
+        except Exception as e:
+            flash(f"Unexpected error: {str(e)}", "danger")
+            return redirect(url_for('calculate'))
+
+    # Render the form for GET requests
+    return render_template('calculate.html')
 
 if __name__ == "__main__":
     app.run(debug=True)

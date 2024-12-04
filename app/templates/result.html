@@ -39,6 +39,7 @@
         <p>Sand Thickness: <span class="result-value" data-value="{{ results.get('Sand Thickness', 'N/A') }}">0</span> m</p>
         <p>Leach Field Area: <span class="result-value" data-value="{{ results.get('Leach Field Area', 'N/A') }}">0</span> m²</p>
         <p>Groundwater Safety: <span>{{ results.get('Groundwater Safety', 'N/A') }}</span></p>
+        <p>Flooding Risk: <span>{{ results.get('Flooding Risk', 'N/A') }}</span></p>
         <p>Tank Width: <span class="result-value" data-value="{{ results.get('Tank Width', 'N/A') }}">0</span> m</p>
         <p>Tank Height: <span class="result-value" data-value="{{ results.get('Tank Height', 'N/A') }}">0</span> m</p>
         <p>Tank Depth: <span class="result-value" data-value="{{ results.get('Tank Depth', 'N/A') }}">0</span> m</p>
@@ -54,7 +55,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         function animateValue(element, targetValue) {
             let startValue = 0;
-            let duration = 2000; // Duration in ms
+            let duration = 2000;
             let stepTime = Math.abs(Math.floor(duration / targetValue));
             let increment = Math.ceil(targetValue / 100);
 
