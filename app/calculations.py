@@ -65,11 +65,19 @@ def calculate_groundwater_safety(depth, flow_direction):
 def calculate_tank_dimensions(total_volume):
     """
     Calculate the dimensions (width, height, depth) of the septic tank
-    based on the total volume.
+    based on the total volume. Dimensions are rounded for display purposes.
     """
-    tank_width = (total_volume / 2.5) ** (1/3) * 2  # Simplified scaling
-    tank_height = tank_width / 1.4  # Example ratio
-    tank_depth = total_volume / (tank_width * tank_height)  # Adjust depth
+    tank_width = round((total_volume / 2.5) ** (1/3) * 2, 2)  # Simplified scaling and rounded to 2 decimals
+    tank_height = round(tank_width / 1.4, 2)  # Example ratio, rounded to 2 decimals
+    tank_depth = round(total_volume / (tank_width * tank_height), 2)  # Adjust depth and round to 2 decimals
+
+    # Ensure no dimension is excessively large by applying a scaling factor if needed
+    scale_factor = max(tank_width, tank_height, tank_depth) / 10  # Arbitrary threshold for scaling
+    if scale_factor > 1:
+        tank_width = round(tank_width / scale_factor, 2)
+        tank_height = round(tank_height / scale_factor, 2)
+        tank_depth = round(tank_depth / scale_factor, 2)
+
     return tank_width, tank_height, tank_depth
 
 def apply_seasonal_factors(total_volume, seasonal_factor, prone_to_flooding):
