@@ -11,32 +11,36 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
     <!-- Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- FontLoader for Three.js TextGeometry -->
     <script src="https://threejs.org/examples/jsm/loaders/FontLoader.js"></script>
     <script src="https://threejs.org/examples/jsm/geometries/TextGeometry.js"></script>
 </head>
 <body>
 
+<!-- Sidebar -->
 <div class="sidebar">
     <h2>Septic Calculator</h2>
     <a href="/">Home</a>
     <a href="/calculate">Calculator</a>
-    <a href="#">Results</a> <!-- Set to "#" to prevent direct access -->
+    <a href="/knowledge">Knowledge Guide</a> <!-- Add the new link here -->
+    <a href="#">Results</a>
 </div>
+
+<!-- Toggle Button for Mobile Sidebar -->
+<button class="sidebar-toggle">Menu</button>
 
 <div class="container">
     <h1 class="text-center mt-4">Calculation Results</h1>
     <div class="results mb-5 p-3 bg-light rounded shadow-sm">
-        <!-- Result placeholders with animation classes -->
+        <!-- Results -->
         <p>Volume of Liquid: <span class="result-value" data-value="{{ results.get('Volume of Liquid', 'N/A') }}">0</span> m³</p>
         <p>Volume of Sludge: <span class="result-value" data-value="{{ results.get('Volume of Sludge', 'N/A') }}">0</span> m³</p>
         <p>Total Tank Volume: <span class="result-value" data-value="{{ results.get('Total Tank Volume', 'N/A') }}">0</span> m³</p>
+        <p>Retention Time: <span class="result-value" data-value="{{ results.get('Retention Time', 'N/A') }}">0</span> days</p>
         <p>H₂S Emissions: <span class="result-value" data-value="{{ results.get('H2S Emissions', 'N/A') }}">0</span> g/day</p>
         <p>Sand Thickness: <span class="result-value" data-value="{{ results.get('Sand Thickness', 'N/A') }}">0</span> m</p>
         <p>Leach Field Area: <span class="result-value" data-value="{{ results.get('Leach Field Area', 'N/A') }}">0</span> m²</p>
         <p>Groundwater Safety: <span>{{ results.get('Groundwater Safety', 'N/A') }}</span></p>
-        
-        <!-- New Tank Dimensions with animation -->
+        <p>Flooding Risk: <span>{{ results.get('Flooding Risk', 'N/A') }}</span></p>
         <p>Tank Width: <span class="result-value" data-value="{{ results.get('Tank Width', 'N/A') }}">0</span> m</p>
         <p>Tank Height: <span class="result-value" data-value="{{ results.get('Tank Height', 'N/A') }}">0</span> m</p>
         <p>Tank Depth: <span class="result-value" data-value="{{ results.get('Tank Depth', 'N/A') }}">0</span> m</p>
@@ -47,42 +51,35 @@
     <div id="tank-visualization" style="width: 80%; height: 400px; margin: 0 auto; background-color: #f8f9fa; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);"></div>
 </div>
 
-<!-- Inline JavaScript for Sequential Animation -->
+<!-- Animation for Result Values -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Function to animate counting from 0 to target value
         function animateValue(element, targetValue) {
             let startValue = 0;
-            let duration = 2000; // Duration in ms
-            let stepTime = Math.abs(Math.floor(duration / targetValue));
-            let increment = Math.ceil(targetValue / 100); // Smooth increment
+            let duration = 2000; // 2 seconds
+            let stepTime = Math.abs(Math.floor(duration / targetValue)) || 20; // Minimum 20ms steps
+            let increment = Math.ceil(targetValue / 100);
 
             let timer = setInterval(() => {
                 startValue += increment;
                 if (startValue >= targetValue) {
-                    startValue = targetValue; // To prevent overflow
+                    startValue = targetValue;
                     clearInterval(timer);
                 }
                 element.innerText = startValue.toFixed(2);
             }, stepTime);
         }
 
-        // Get all elements with the class "result-value" for sequential animation
-        const results = document.querySelectorAll('.result-value');
-        
-        // Sequential animation logic
-        let delay = 0;
-        results.forEach((result) => {
+        document.querySelectorAll('.result-value').forEach(result => {
             const targetValue = parseFloat(result.dataset.value);
-            setTimeout(() => {
+            if (!isNaN(targetValue)) {
                 animateValue(result, targetValue);
-            }, delay);
-            delay += 500; // Delay between each result
+            }
         });
     });
 </script>
 
-<!-- 3D Visualization Code with Labels -->
+<!-- 3D Visualization with Labels -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const tankWidth = {{ results.get('Tank Width', 1) }};
@@ -90,9 +87,9 @@
         const tankDepth = {{ results.get('Tank Depth', 1) }};
 
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / 500, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / 400, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(document.getElementById('tank-visualization').clientWidth, 400);
+        renderer.setSize(window.innerWidth * 0.8, 400);
         document.getElementById('tank-visualization').appendChild(renderer.domElement);
 
         const geometry = new THREE.BoxGeometry(tankWidth, tankHeight, tankDepth);
@@ -102,9 +99,8 @@
 
         camera.position.z = 5;
 
-        // Load font and add text labels
         const loader = new THREE.FontLoader();
-        loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', (font) => {
+        loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', font => {
             const addText = (text, position) => {
                 const textGeometry = new THREE.TextGeometry(text, {
                     font: font,
@@ -117,10 +113,9 @@
                 scene.add(textMesh);
             };
 
-            // Add labels for Width, Height, Depth
-            addText(`Width: ${tankWidth} m`, { x: tankWidth / 2, y: -tankHeight / 2 - 0.3, z: 0 });
-            addText(`Height: ${tankHeight} m`, { x: -tankWidth / 2 - 0.3, y: tankHeight / 2, z: 0 });
-            addText(`Depth: ${tankDepth} m`, { x: 0, y: -tankHeight / 2 - 0.3, z: -tankDepth / 2 });
+            addText(`Width: ${tankWidth}m`, { x: tankWidth / 2, y: -tankHeight / 2 - 0.3, z: 0 });
+            addText(`Height: ${tankHeight}m`, { x: -tankWidth / 2 - 0.3, y: tankHeight / 2, z: 0 });
+            addText(`Depth: ${tankDepth}m`, { x: 0, y: -tankHeight / 2 - 0.3, z: -tankDepth / 2 });
         });
 
         function animate() {
@@ -129,17 +124,8 @@
             renderer.render(scene, camera);
         }
         animate();
-
-        window.addEventListener('resize', () => {
-            renderer.setSize(document.getElementById('tank-visualization').clientWidth, 400);
-            camera.aspect = document.getElementById('tank-visualization').clientWidth / 400;
-            camera.updateProjectionMatrix();
-        });
     });
 </script>
-
-<!-- Additional JavaScript for sidebar animation -->
-<script src="{{ url_for('static', filename='script.js') }}"></script>
 
 </body>
 </html>

@@ -17,13 +17,12 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
-    flex-direction: column;
     background-color: #f8f9fa;
 }
 
 /* Sidebar styling */
 .sidebar {
-    width: 220px; /* Reduced size for better desktop spacing */
+    width: 250px;
     background-color: #007bff;
     color: white;
     height: 100vh;
@@ -33,37 +32,36 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1000; /* Ensure it overlays content */
-    transform: translateX(0); /* Default: visible */
-    transition: transform 0.3s ease; /* Smooth toggle */
+    z-index: 1000;
+    transform: translateX(0);
+    transition: transform 0.3s ease;
 }
 
 .sidebar.hidden {
-    transform: translateX(-220px); /* Hide sidebar */
+    transform: translateX(-250px);
 }
 
 .sidebar h2, .sidebar a {
+    font-family: 'Poppins', sans-serif;
     font-weight: 600;
     color: white;
 }
 
 .sidebar h2 {
     padding: 0 20px;
-    margin-bottom: 10px;
 }
 
 .sidebar a {
-    padding: 12px 20px;
+    padding: 15px 20px;
     text-decoration: none;
     display: block;
-    font-size: 0.95rem;
 }
 
 .sidebar a:hover {
     background-color: #0056b3;
 }
 
-/* Toggle button for sidebar */
+/* Sidebar toggle button */
 .sidebar-toggle {
     position: fixed;
     top: 15px;
@@ -79,30 +77,41 @@ body {
 
 /* Content container */
 .container {
-    margin-left: 240px; /* Adjust for sidebar width */
-    padding: 30px;
+    margin-left: 250px; /* Adjusted for sidebar */
+    padding: 20px; /* Consistent padding for all pages */
     background-color: #f8f9fa;
-    transition: margin-left 0.3s ease; /* Smooth transition */
+    transition: margin-left 0.3s ease;
+    min-height: calc(100vh - 40px); /* Full-page height minus padding */
 }
 
-.sidebar.hidden + .container {
-    margin-left: 0;
+/* Special alignment for static pages like Homepage and Knowledge Guide */
+.container.static-page {
+    display: block; /* Revert flexbox for static pages */
+    text-align: center; /* Center-align content */
+    padding-top: 50px; /* Top padding for better spacing */
 }
 
-/* Center content for better alignment */
-.container h1 {
+/* Dynamic pages (Calculator, Results) */
+.container.dynamic-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-    color: #007bff;
-    margin-bottom: 20px;
 }
 
-.container form, .container .results {
+/* Form and results styling */
+form, .results {
     max-width: 800px;
     margin: 0 auto;
     background: white;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #007bff;
 }
 
 /* Button styling */
@@ -115,30 +124,18 @@ button.btn-primary:hover {
     background-color: #0056b3;
 }
 
-/* Results page adjustments */
-.results p {
-    font-size: 0.95rem;
-    line-height: 1.4;
-}
-
-.results h2 {
-    text-align: center;
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-}
-
 /* Responsive design */
 @media (max-width: 768px) {
     .sidebar {
-        transform: translateX(-220px); /* Default: hidden on mobile */
+        transform: translateX(-250px);
     }
 
     .sidebar.visible {
-        transform: translateX(0); /* Show on toggle */
+        transform: translateX(0);
     }
 
     .container {
-        margin-left: 0; /* Remove sidebar offset for mobile */
+        margin-left: 0;
         padding: 15px;
     }
 

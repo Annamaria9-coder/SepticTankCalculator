@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to Septic Tank Calculator</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <!-- Bootstrap CSS for styling -->
@@ -9,16 +10,19 @@
 </head>
 <body>
 
+<!-- Sidebar -->
 <div class="sidebar">
     <h2>Septic Calculator</h2>
     <a href="/">Home</a>
     <a href="/calculate">Calculator</a>
-    <a href="#">Results</a>
+    <a href="/knowledge">Knowledge Guide</a> <!-- Add the new link here -->
+    <a href="#">Results</a> <!-- Prevent direct navigation -->
 </div>
 
+<!-- Main Container -->
 <div class="container mt-5">
     <div class="p-5 bg-light rounded-3 shadow-sm">
-        <h1 class="text-center mb-4" style="font-weight: bold; color: #007bff;">Welcome to the Global Communities' Septic Tank Calculator</h1>
+        <h1 class="text-center mb-4 text-primary">Welcome to the Global Communities' Septic Tank Calculator</h1>
         <p class="text-center fs-5">
             This tool helps engineers and community planners calculate the required volume for septic tanks based on various parameters.
         </p>
@@ -30,6 +34,21 @@
         </div>
     </div>
 </div>
+
+<!-- Responsive Sidebar Toggle Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const sidebar = document.querySelector('.sidebar');
+        const toggleButton = document.createElement('button');
+        toggleButton.classList.add('btn', 'btn-primary', 'd-md-none', 'mb-3');
+        toggleButton.textContent = '☰ Menu';
+        document.body.insertBefore(toggleButton, sidebar);
+
+        toggleButton.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+        });
+    });
+</script>
 
 </body>
 </html>
