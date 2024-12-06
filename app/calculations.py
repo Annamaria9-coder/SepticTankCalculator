@@ -1,7 +1,7 @@
 from .constants import (
     SLUDGE_ACCUMULATION_RATE, FLUSH_COUNT, CISTERN_SIZE,
-    LIQUID_DEPTH, FREEBOARD, SAND_MIN_THICKNESS, GRAVEL_PACK_THICKNESS, 
-    CORE_MATERIAL_THICKNESS, RETENTION_TIME_MULTIPLIER, H2S_EMISSION_ESTIMATE,
+    LIQUID_DEPTH, FREEBOARD, MIXED_MEDIA_THICKNESS,
+    RETENTION_TIME_MULTIPLIER, H2S_EMISSION_ESTIMATE,
     LEACH_FIELD_MULTIPLIER, EFFLUENT_REUSE_FACTOR, SEASONAL_FLOODING_MULTIPLIER,
     SEASONAL_USAGE_FACTOR, PERCOLATION_RATE_SANDY, PERCOLATION_RATE_LOAM,
     PERCOLATION_RATE_CLAY, MIN_GROUNDWATER_DEPTH
@@ -24,15 +24,16 @@ def calculate_h2s_emissions(household_size):
     """Estimate H2S emissions based on household size."""
     return household_size * H2S_EMISSION_ESTIMATE
 
-def calculate_required_thickness(user_inputs):
+def calculate_required_thickness(flow_rate):
     """
-    Ensure the thicknesses of the sand, gravel, and core material
-    meet the minimum requirements.
+    Retrieve mixed media thickness based on flow rate.
     """
-    sand_thickness = max(user_inputs["sand_thickness"], SAND_MIN_THICKNESS)
-    gravel_thickness = GRAVEL_PACK_THICKNESS
-    core_material_thickness = CORE_MATERIAL_THICKNESS
-    return sand_thickness, gravel_thickness, core_material_thickness
+    if flow_rate <= 100:
+        return MIXED_MEDIA_THICKNESS["low_flow"]
+    elif flow_rate <= 300:
+        return MIXED_MEDIA_THICKNESS["moderate_flow"]
+    else:
+        return MIXED_MEDIA_THICKNESS["high_flow"]
 
 def get_percolation_rate(soil_type):
     """Retrieve the percolation rate based on soil type."""
@@ -70,7 +71,6 @@ def calculate_tank_dimensions(total_volume):
     Calculate the dimensions (width, height, depth) of the septic tank
     based on the total volume. Placeholder logic for demonstration.
     """
-    # Example logic based on volume
     tank_width = (total_volume / 2.5) ** (1/3) * 2  # Simplified scaling
     tank_height = tank_width / 1.4  # Example ratio
     tank_depth = total_volume / (tank_width * tank_height)  # Adjust depth
@@ -94,6 +94,7 @@ def calculate_tank_requirements(user_inputs):
     groundwater_flow = user_inputs["groundwater_flow"]
     effluent_reuse = user_inputs["effluent_reuse"] == "yes"
     prone_to_flooding = user_inputs.get("prone_to_flooding", False)
+    flow_rate = user_inputs.get("flow_rate", 150)  # Default flow rate
 
     volume_liquid = calculate_volume_liquid(household_size)
     volume_sludge = calculate_volume_sludge(household_size)
@@ -101,7 +102,7 @@ def calculate_tank_requirements(user_inputs):
     adjusted_total_volume = apply_seasonal_factors(base_total_volume, user_inputs["seasonal_factor"], prone_to_flooding)
 
     h2s_emissions = calculate_h2s_emissions(household_size)
-    sand_thickness, gravel_thickness, core_material_thickness = calculate_required_thickness(user_inputs)
+    mixed_media_thickness = calculate_required_thickness(flow_rate)
     leach_field_area = calculate_leach_field_area(adjusted_total_volume, soil_type, effluent_reuse)
     groundwater_safety = calculate_groundwater_safety(groundwater_depth, groundwater_flow)
 
@@ -113,9 +114,7 @@ def calculate_tank_requirements(user_inputs):
         "Volume of Sludge": volume_sludge,
         "Total Tank Volume": adjusted_total_volume,
         "H2S Emissions": h2s_emissions,
-        "Sand Thickness": sand_thickness,
-        "Gravel Thickness": gravel_thickness,
-        "Core Material Thickness": core_material_thickness,
+        "Mixed Media Thickness": mixed_media_thickness,
         "Leach Field Area": leach_field_area,
         "Groundwater Safety": groundwater_safety,
         "Tank Width": tank_width,
