@@ -17,26 +17,28 @@ def calculate():
     if request.method == 'POST':
         try:
             # Validate and collect inputs
-            borehole_distance = float(request.form['borehole_distance'])
-            if borehole_distance < MIN_BOREHOLE_DISTANCE:
-                flash(
-                    f"Warning: Distance to borehole must be at least {MIN_BOREHOLE_DISTANCE} meters.",
-                    "warning"
-                )
-                return redirect(url_for('calculate'))
+            borehole_distance = request.form.get('borehole_distance')
+            if borehole_distance:
+                borehole_distance = float(borehole_distance)
+                if borehole_distance < MIN_BOREHOLE_DISTANCE:
+                    flash(
+                        f"Warning: Distance to borehole must be at least {MIN_BOREHOLE_DISTANCE} meters.",
+                        "warning"
+                    )
+                    return redirect(url_for('calculate'))
 
             # Collect user inputs from the form
             user_inputs = {
-                "household_size": int(request.form['household_size']),
-                "tank_type": request.form['tank_type'],
-                "soil_type": request.form['soil_type'],  # Added soil_type
-                "groundwater_flow": request.form['groundwater_flow'],  # Added groundwater_flow
-                "groundwater_depth": float(request.form['groundwater_depth']),  # Added groundwater_depth
+                "household_size": int(request.form.get('household_size', 0)),
+                "tank_type": request.form.get('tank_type'),
+                "soil_type": request.form.get('soil_type'),  # Added soil_type
+                "groundwater_flow": request.form.get('groundwater_flow'),  # Added groundwater_flow
+                "groundwater_depth": float(request.form.get('groundwater_depth', 0)),  # Added groundwater_depth
                 "borehole_distance": borehole_distance,
-                "seasonal_factor": float(request.form['seasonal_factor']),
-                "sand_thickness": float(request.form['sand_thickness']),
-                "effluent_reuse": request.form['effluent_reuse'] == "yes",  # Convert to boolean
-                "prone_to_flooding": request.form['flooding_risk'] == "yes",  # Convert to boolean
+                "seasonal_factor": float(request.form.get('seasonal_factor', 1.0)),
+                "sand_thickness": float(request.form.get('sand_thickness', 0)),
+                "effluent_reuse": request.form.get('effluent_reuse') == "yes",  # Convert to boolean
+                "prone_to_flooding": request.form.get('flooding_risk') == "yes",  # Convert to boolean
             }
 
             # Perform calculations
@@ -45,8 +47,11 @@ def calculate():
             # Render the results page with calculated data
             return render_template('result.html', results=results)
 
-        except ValueError:
-            flash("Invalid input: Please enter valid numerical values.", "danger")
+        except ValueError as ve:
+            flash(f"Invalid input: {str(ve)}. Please enter valid numerical values.", "danger")
+            return redirect(url_for('calculate'))
+        except KeyError as ke:
+            flash(f"Missing required input: {str(ke)}. Please fill in all required fields.", "danger")
             return redirect(url_for('calculate'))
         except Exception as e:
             flash(f"Unexpected error: {str(e)}", "danger")
