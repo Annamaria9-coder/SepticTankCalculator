@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Guide</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <h2>Septic Calculator</h2>
+    <a href="/" class="{{ 'active' if request.path == '/' else '' }}">Home</a>
+    <a href="/calculate" class="{{ 'active' if request.path == '/calculate' else '' }}">Calculator</a>
+    <a href="/results" class="{{ 'active' if request.path == '/results' else '' }}">Results</a>
+    <a href="/knowledge" class="{{ 'active' if request.path == '/knowledge' else '' }}">Knowledge Guide</a>
+</div>
+
+<!-- Main Container -->
+<div class="container">
+    <h1>Knowledge Guide</h1>
+
+    <section>
+        <h2>Background of the Project</h2>
+        <p>
+            The Global Communities' Septic Tank Calculator was developed to address a critical gap in sustainable wastewater management. Poorly designed septic systems pose significant health and environmental risks, especially in resource-limited settings. This tool provides a robust framework for designing septic tanks and leach fields based on precise engineering calculations.
+        </p>
+    </section>
+
+    <section>
+        <h2>Goals of the Project</h2>
+        <ul>
+            <li>Provide an intuitive interface for septic tank design calculations.</li>
+            <li>Incorporate real-world factors such as soil type, groundwater levels, and effluent reuse.</li>
+            <li>Promote environmental sustainability and public health through proper wastewater management.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>How the Tool Works</h2>
+        <p>
+            The tool calculates septic tank dimensions and leach field areas using **engineering formulas** and **standard constants** derived from environmental and wastewater management guidelines. Here's a breakdown of the calculations:
+        </p>
+        <ul>
+            <li>
+                <b>Volume of Liquid:</b> This is based on the daily water usage per household member, flush count, and cistern size. The formula is:
+                <code>Volume of Liquid = Household Size × Flush Count × Cistern Size</code>.
+            </li>
+            <li>
+                <b>Volume of Sludge:</b> The tool assumes a sludge accumulation rate per person and calculates the total sludge volume.
+            </li>
+            <li>
+                <b>Total Volume:</b> The total tank volume combines the liquid and sludge volumes, multiplied by a retention time multiplier:
+                <code>Total Volume = (Volume of Liquid + Volume of Sludge) × Retention Time</code>.
+            </li>
+            <li>
+                <b>Leach Field Area:</b> The leach field area is determined by soil percolation rate and total effluent volume. The formula includes a multiplier for effluent reuse and seasonal flooding risks.
+            </li>
+        </ul>
+        <p>
+            Constants like <b>sludge accumulation rate</b>, <b>flush count</b>, <b>cistern size</b>, and <b>percolation rates</b> are pre-defined based on standard environmental guidelines and can be adjusted for local contexts.
+        </p>
+    </section>
+
+    <section>
+        <h2>Technical Details</h2>
+        <p>
+            The backend of the tool is powered by Flask, a lightweight Python web framework. Inputs from the user are validated and passed to a set of functions in the `calculations.py` file. These functions use predefined constants from `constants.py` to compute the septic tank dimensions, H₂S emissions, and leach field area.
+        </p>
+        <p>
+            The formulas and constants used in the calculations are grounded in standard engineering principles, such as:
+        </p>
+        <ul>
+            <li>Environmental Protection Agency (EPA) guidelines.</li>
+            <li>WHO standards for wastewater management.</li>
+            <li>Site-specific adjustments for effluent reuse and flooding risks.</li>
+        </ul>
+        <p>
+            The results are rendered dynamically on the Results page, and the tool uses a responsive design for usability on both desktop and mobile devices.
+        </p>
+    </section>
+
+    <section>
+        <h2>Credits</h2>
+        <p>
+            This project is a collaboration between engineers, environmental scientists, and community development practitioners under the Global Communities initiative. Special thanks to all contributors for their dedication to improving wastewater management worldwide.
+        </p>
+    </section>
+</div>
+
+</body>
+</html>
