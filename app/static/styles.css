@@ -17,6 +17,7 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
+    flex-direction: row; /* Align sidebar and content side by side */
     background-color: #f8f9fa;
 }
 
@@ -33,15 +34,9 @@ body {
     top: 0;
     left: 0;
     z-index: 1000;
-    transition: transform 0.3s ease; /* Smooth toggle */
+    box-sizing: border-box;
 }
 
-/* Hidden sidebar for mobile */
-.sidebar.hidden {
-    transform: translateX(-250px); /* Hide sidebar */
-}
-
-/* Sidebar content */
 .sidebar h2, .sidebar a {
     font-weight: 600;
     color: white;
@@ -64,32 +59,18 @@ body {
 
 /* Sidebar toggle button */
 .sidebar-toggle {
-    position: fixed;
-    top: 15px;
-    left: 15px;
-    background-color: #007bff;
-    border: none;
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    z-index: 1001;
+    display: none; /* Hide toggle button on desktop */
 }
 
 /* Content container */
 .container {
-    flex: 1;
+    margin-left: 250px; /* Offset content by sidebar width */
     padding: 20px;
-    margin-left: 250px; /* Offset to account for sidebar width */
+    flex: 1;
     background-color: #f8f9fa;
-    transition: margin-left 0.3s ease; /* Smooth transition for toggling */
-    min-height: 100vh; /* Ensure content fills the full height */
-    box-sizing: border-box; /* Include padding in width calculations */
-}
-
-/* Adjust container for hidden sidebar */
-.sidebar.hidden + .container {
-    margin-left: 0;
+    box-sizing: border-box;
+    min-height: 100vh;
+    overflow-x: auto; /* Prevent horizontal overflow */
 }
 
 h1 {
@@ -112,27 +93,39 @@ button.btn-primary:hover {
     background-color: #0056b3;
 }
 
-/* Responsive design */
+/* Responsive design for smaller screens */
 @media (max-width: 768px) {
     body {
-        flex-direction: column;
+        flex-direction: column; /* Stack sidebar and content vertically */
     }
 
     .sidebar {
-        transform: translateX(-250px); /* Default: hidden on mobile */
+        position: fixed;
+        transform: translateX(-250px); /* Hide sidebar by default on mobile */
+        transition: transform 0.3s ease;
     }
 
     .sidebar.visible {
-        transform: translateX(0); /* Show on toggle */
-    }
-
-    .container {
-        margin-left: 0; /* Remove sidebar offset for mobile */
-        padding: 15px;
+        transform: translateX(0); /* Show sidebar on toggle */
     }
 
     .sidebar-toggle {
-        display: block;
+        display: block; /* Show toggle button on mobile */
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        background-color: #007bff;
+        border: none;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        z-index: 1001;
+    }
+
+    .container {
+        margin-left: 0; /* Remove sidebar offset on mobile */
+        padding: 15px;
     }
 
     h1 {
@@ -146,13 +139,7 @@ button.btn-primary:hover {
 
 @media (max-width: 480px) {
     .sidebar a {
-        font-size: 0.9rem; /* Smaller link text for mobile */
-    }
-
-    .sidebar-toggle {
-        top: 10px;
-        left: 10px;
-        padding: 8px;
+        font-size: 0.9rem; /* Smaller text for narrow screens */
     }
 
     h1 {
