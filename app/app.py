@@ -22,13 +22,13 @@ def calculate():
             effluent_reuse = request.form.get('effluent_reuse') == "yes"
             prone_to_flooding = request.form.get('flooding_risk') == "yes"
 
-            # Initialize optional inputs
+            # Initialize optional inputs for three-chambered tanks
             soil_type = request.form.get('soil_type', None)
             groundwater_flow = request.form.get('groundwater_flow', None)
             groundwater_depth = request.form.get('groundwater_depth', None)
             borehole_distance = request.form.get('borehole_distance', None)
 
-            # Validate three-chamber specific inputs
+            # Validate three-chamber-specific inputs
             if tank_type == "3":
                 missing_fields = []
                 if not soil_type:
@@ -58,13 +58,13 @@ def calculate():
                     )
                     return redirect(url_for('calculate'))
             else:
-                # Reset unused inputs for 4-chamber tanks
+                # Reset unused inputs for 4-chambered tanks
                 soil_type = None
                 groundwater_flow = None
                 groundwater_depth = None
                 borehole_distance = None
 
-            # Collect user inputs into a dictionary
+            # Collect all inputs into a dictionary
             user_inputs = {
                 "household_size": household_size,
                 "tank_type": tank_type,
