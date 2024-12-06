@@ -3,6 +3,7 @@
 # Minimum distances and safety
 MIN_BOREHOLE_DISTANCE = 30  # Minimum distance in meters
 MIN_GROUNDWATER_DEPTH = 1.5  # Minimum depth in meters to avoid contamination
+SAND_MIN_THICKNESS = 0.6  # Minimum thickness for sand layer in meters
 
 # Borehole distance assumptions
 BOREHOLE_DISTANCE_CONDITIONS = {
