@@ -15,10 +15,9 @@ def calculate_volume_sludge(household_size):
     """Calculate the volume of sludge based on household size."""
     return SLUDGE_ACCUMULATION_RATE * household_size
 
-def calculate_total_volume(volume_liquid, volume_sludge, retention_time):
-    """Calculate the total volume of the septic tank."""
-    total_volume = volume_liquid + volume_sludge
-    return total_volume * retention_time * RETENTION_TIME_MULTIPLIER
+def calculate_retention_time(total_volume, flow_rate):
+    """Calculate the retention time as Total Volume / Flow Rate."""
+    return total_volume / flow_rate
 
 def calculate_h2s_emissions(household_size):
     """Estimate H2S emissions based on household size."""
@@ -92,14 +91,15 @@ def calculate_tank_requirements(user_inputs):
     soil_type = user_inputs["soil_type"]
     groundwater_depth = user_inputs["groundwater_depth"]
     groundwater_flow = user_inputs["groundwater_flow"]
-    effluent_reuse = user_inputs["effluent_reuse"] == "yes"
+    effluent_reuse = user_inputs["effluent_reuse"]
     prone_to_flooding = user_inputs.get("prone_to_flooding", False)
     flow_rate = user_inputs.get("flow_rate", 150)  # Default flow rate
 
     volume_liquid = calculate_volume_liquid(household_size)
     volume_sludge = calculate_volume_sludge(household_size)
-    base_total_volume = calculate_total_volume(volume_liquid, volume_sludge, user_inputs["retention_time"])
+    base_total_volume = volume_liquid + volume_sludge
     adjusted_total_volume = apply_seasonal_factors(base_total_volume, user_inputs["seasonal_factor"], prone_to_flooding)
+    retention_time = calculate_retention_time(adjusted_total_volume, flow_rate)
 
     h2s_emissions = calculate_h2s_emissions(household_size)
     mixed_media_thickness = calculate_required_thickness(flow_rate)
@@ -112,6 +112,7 @@ def calculate_tank_requirements(user_inputs):
     return {
         "Volume of Liquid": volume_liquid,
         "Volume of Sludge": volume_sludge,
+        "Retention Time": retention_time,
         "Total Tank Volume": adjusted_total_volume,
         "H2S Emissions": h2s_emissions,
         "Mixed Media Thickness": mixed_media_thickness,
