@@ -93,12 +93,14 @@ def calculate_tank_requirements(user_inputs):
     prone_to_flooding = user_inputs.get("prone_to_flooding", False)
     flow_rate = user_inputs.get("flow_rate", 150)  # Default flow rate
 
+    # Calculate basic parameters
     volume_liquid = calculate_volume_liquid(household_size)
     volume_sludge = calculate_volume_sludge(household_size)
     base_total_volume = volume_liquid + volume_sludge
     adjusted_total_volume = apply_seasonal_factors(base_total_volume, user_inputs["seasonal_factor"], prone_to_flooding)
     retention_time = calculate_retention_time(adjusted_total_volume, flow_rate)
 
+    # Calculate outputs dependent on tank type
     sand_thickness = calculate_sand_thickness(tank_type, effluent_reuse)
     h2s_emissions = calculate_h2s_emissions(household_size)
 
@@ -109,6 +111,7 @@ def calculate_tank_requirements(user_inputs):
         leach_field_area = None
         groundwater_safety = "N/A (4-chamber does not interact with groundwater)"
 
+    # Tank dimensions
     tank_width, tank_height, tank_depth = calculate_tank_dimensions(adjusted_total_volume)
 
     return {
