@@ -33,7 +33,12 @@ body {
     top: 0;
     left: 0;
     z-index: 1000;
-    transition: transform 0.3s ease; /* Smooth sidebar transitions */
+    transition: transform 0.3s ease; /* Smooth toggle */
+}
+
+/* Hidden sidebar for mobile */
+.sidebar.hidden {
+    transform: translateX(-250px); /* Hide sidebar */
 }
 
 /* Sidebar content */
@@ -57,20 +62,8 @@ body {
     background-color: #0056b3;
 }
 
-/* Content container */
-.container {
-    flex: 1;
-    padding: 20px;
-    margin-left: 250px; /* Offset for sidebar */
-    background-color: #f8f9fa;
-    min-height: 100vh; /* Ensures full height on larger screens */
-    box-sizing: border-box;
-    transition: margin-left 0.3s ease; /* Smooth transition */
-}
-
-/* Toggle button for mobile */
+/* Sidebar toggle button */
 .sidebar-toggle {
-    display: none;
     position: fixed;
     top: 15px;
     left: 15px;
@@ -80,14 +73,21 @@ body {
     padding: 10px;
     border-radius: 5px;
     cursor: pointer;
-    z-index: 1001; /* Above the sidebar */
+    z-index: 1001;
 }
 
-/* Hidden sidebar for mobile */
-.sidebar.hidden {
-    transform: translateX(-250px);
+/* Content container */
+.container {
+    flex: 1;
+    padding: 20px;
+    margin-left: 250px; /* Offset to account for sidebar width */
+    background-color: #f8f9fa;
+    transition: margin-left 0.3s ease; /* Smooth transition for toggling */
+    min-height: 100vh; /* Ensure content fills the full height */
+    box-sizing: border-box; /* Include padding in width calculations */
 }
 
+/* Adjust container for hidden sidebar */
 .sidebar.hidden + .container {
     margin-left: 0;
 }
@@ -112,29 +112,27 @@ button.btn-primary:hover {
     background-color: #0056b3;
 }
 
-/* Responsive design for smaller screens */
-@media (max-width: 1024px) {
-    .container {
-        margin-left: 250px; /* Sidebar still visible on tablets */
-    }
-}
-
+/* Responsive design */
 @media (max-width: 768px) {
+    body {
+        flex-direction: column;
+    }
+
     .sidebar {
-        transform: translateX(-250px); /* Hidden by default on mobile */
+        transform: translateX(-250px); /* Default: hidden on mobile */
     }
 
     .sidebar.visible {
-        transform: translateX(0); /* Show sidebar when toggled */
+        transform: translateX(0); /* Show on toggle */
     }
 
     .container {
-        margin-left: 0; /* Adjust container for hidden sidebar */
+        margin-left: 0; /* Remove sidebar offset for mobile */
         padding: 15px;
     }
 
     .sidebar-toggle {
-        display: block; /* Visible on mobile */
+        display: block;
     }
 
     h1 {
@@ -154,7 +152,7 @@ button.btn-primary:hover {
     .sidebar-toggle {
         top: 10px;
         left: 10px;
-        padding: 8px; /* Smaller button for narrow screens */
+        padding: 8px;
     }
 
     h1 {
