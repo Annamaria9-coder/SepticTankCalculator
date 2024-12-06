@@ -4,7 +4,7 @@ from .constants import (
     RETENTION_TIME_MULTIPLIER, H2S_EMISSION_ESTIMATE,
     LEACH_FIELD_MULTIPLIER, EFFLUENT_REUSE_FACTOR, SEASONAL_FLOODING_MULTIPLIER,
     SEASONAL_USAGE_FACTOR, PERCOLATION_RATE_SANDY, PERCOLATION_RATE_LOAM,
-    PERCOLATION_RATE_CLAY, MIN_GROUNDWATER_DEPTH
+    PERCOLATION_RATE_CLAY, MIN_GROUNDWATER_DEPTH, SAND_MIN_THICKNESS
 )
 
 def calculate_volume_liquid(household_size):
@@ -23,16 +23,13 @@ def calculate_h2s_emissions(household_size):
     """Estimate H2S emissions based on household size."""
     return household_size * H2S_EMISSION_ESTIMATE
 
-def calculate_required_thickness(flow_rate):
+def calculate_sand_thickness(tank_type, effluent_reuse):
     """
-    Retrieve mixed media thickness based on flow rate.
+    Calculate sand thickness dynamically based on tank type and effluent reuse.
     """
-    if flow_rate <= 100:
-        return MIXED_MEDIA_THICKNESS["low_flow"]
-    elif flow_rate <= 300:
-        return MIXED_MEDIA_THICKNESS["moderate_flow"]
-    else:
-        return MIXED_MEDIA_THICKNESS["high_flow"]
+    if tank_type == "4":
+        return 2.0 if effluent_reuse else SAND_MIN_THICKNESS
+    return SAND_MIN_THICKNESS
 
 def get_percolation_rate(soil_type):
     """Retrieve the percolation rate based on soil type."""
@@ -57,7 +54,7 @@ def calculate_leach_field_area(total_volume, soil_type, effluent_reuse):
 def calculate_groundwater_safety(depth, flow_direction):
     """
     Determine if the groundwater safety is adequate based on depth
-    and flow direction. Customizable logic based on threshold and direction.
+    and flow direction.
     """
     if depth < MIN_GROUNDWATER_DEPTH:
         return "Warning: Groundwater too shallow!"
@@ -68,7 +65,7 @@ def calculate_groundwater_safety(depth, flow_direction):
 def calculate_tank_dimensions(total_volume):
     """
     Calculate the dimensions (width, height, depth) of the septic tank
-    based on the total volume. Placeholder logic for demonstration.
+    based on the total volume.
     """
     tank_width = (total_volume / 2.5) ** (1/3) * 2  # Simplified scaling
     tank_height = tank_width / 1.4  # Example ratio
@@ -88,9 +85,10 @@ def apply_seasonal_factors(total_volume, seasonal_factor, prone_to_flooding):
 def calculate_tank_requirements(user_inputs):
     """Perform all calculations and return a summary."""
     household_size = user_inputs["household_size"]
-    soil_type = user_inputs["soil_type"]
-    groundwater_depth = user_inputs["groundwater_depth"]
-    groundwater_flow = user_inputs["groundwater_flow"]
+    tank_type = user_inputs["tank_type"]
+    soil_type = user_inputs.get("soil_type", None)  # Only relevant for 3-chamber tanks
+    groundwater_depth = user_inputs.get("groundwater_depth", None)  # Optional for 4-chamber
+    groundwater_flow = user_inputs.get("groundwater_flow", None)
     effluent_reuse = user_inputs["effluent_reuse"]
     prone_to_flooding = user_inputs.get("prone_to_flooding", False)
     flow_rate = user_inputs.get("flow_rate", 150)  # Default flow rate
@@ -101,12 +99,16 @@ def calculate_tank_requirements(user_inputs):
     adjusted_total_volume = apply_seasonal_factors(base_total_volume, user_inputs["seasonal_factor"], prone_to_flooding)
     retention_time = calculate_retention_time(adjusted_total_volume, flow_rate)
 
+    sand_thickness = calculate_sand_thickness(tank_type, effluent_reuse)
     h2s_emissions = calculate_h2s_emissions(household_size)
-    mixed_media_thickness = calculate_required_thickness(flow_rate)
-    leach_field_area = calculate_leach_field_area(adjusted_total_volume, soil_type, effluent_reuse)
-    groundwater_safety = calculate_groundwater_safety(groundwater_depth, groundwater_flow)
 
-    # Calculate tank dimensions for 3D visualization
+    if tank_type == "3":
+        leach_field_area = calculate_leach_field_area(adjusted_total_volume, soil_type, effluent_reuse)
+        groundwater_safety = calculate_groundwater_safety(groundwater_depth, groundwater_flow)
+    else:
+        leach_field_area = None
+        groundwater_safety = "N/A (4-chamber does not interact with groundwater)"
+
     tank_width, tank_height, tank_depth = calculate_tank_dimensions(adjusted_total_volume)
 
     return {
@@ -115,7 +117,7 @@ def calculate_tank_requirements(user_inputs):
         "Retention Time": retention_time,
         "Total Tank Volume": adjusted_total_volume,
         "H2S Emissions": h2s_emissions,
-        "Mixed Media Thickness": mixed_media_thickness,
+        "Sand Thickness": sand_thickness,
         "Leach Field Area": leach_field_area,
         "Groundwater Safety": groundwater_safety,
         "Tank Width": tank_width,
