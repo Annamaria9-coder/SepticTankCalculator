@@ -17,8 +17,10 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
-    flex-direction: row; /* Align sidebar and content side by side */
+    flex-direction: row; /* Adjust for desktop alignment */
     background-color: #f8f9fa;
+    height: 100vh; /* Ensure full height layout */
+    overflow: hidden; /* Prevent scrolling issues on large layouts */
 }
 
 /* Sidebar styling */
@@ -33,10 +35,31 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1000;
-    box-sizing: border-box;
+    z-index: 1000; /* Ensure it overlays content */
+    transform: translateX(0); /* Default: visible */
+    transition: transform 0.3s ease; /* Smooth toggle */
 }
 
+/* Hidden sidebar for mobile */
+.sidebar.hidden {
+    transform: translateX(-250px); /* Hide sidebar */
+}
+
+/* Toggle button for sidebar */
+.sidebar-toggle {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1001; /* Above the sidebar */
+}
+
+/* Sidebar content */
 .sidebar h2, .sidebar a {
     font-weight: 600;
     color: white;
@@ -57,24 +80,26 @@ body {
     background-color: #0056b3;
 }
 
-/* Sidebar toggle button */
-.sidebar-toggle {
-    display: none; /* Hide toggle button on desktop */
-}
-
 /* Content container */
 .container {
-    margin-left: 250px; /* Offset content by sidebar width */
-    padding: 20px;
     flex: 1;
+    padding: 20px;
+    margin-left: 250px; /* Offset to account for sidebar */
     background-color: #f8f9fa;
-    box-sizing: border-box;
-    min-height: 100vh;
-    overflow-x: auto; /* Prevent horizontal overflow */
+    overflow-y: auto; /* Ensure scrolling for large forms */
+    height: 100vh; /* Fill remaining height */
+    transition: margin-left 0.3s ease; /* Smooth transition */
+    box-sizing: border-box; /* Ensure consistent spacing */
+}
+
+/* Adjust container for hidden sidebar */
+.sidebar.hidden + .container {
+    margin-left: 0;
 }
 
 h1 {
     color: #007bff;
+    text-align: center; /* Center align headers for consistency */
 }
 
 form, .results {
@@ -93,39 +118,27 @@ button.btn-primary:hover {
     background-color: #0056b3;
 }
 
-/* Responsive design for smaller screens */
+/* Responsive design */
 @media (max-width: 768px) {
     body {
-        flex-direction: column; /* Stack sidebar and content vertically */
+        flex-direction: column;
     }
 
     .sidebar {
-        position: fixed;
-        transform: translateX(-250px); /* Hide sidebar by default on mobile */
-        transition: transform 0.3s ease;
+        transform: translateX(-250px); /* Default: hidden on mobile */
     }
 
     .sidebar.visible {
-        transform: translateX(0); /* Show sidebar on toggle */
-    }
-
-    .sidebar-toggle {
-        display: block; /* Show toggle button on mobile */
-        position: fixed;
-        top: 15px;
-        left: 15px;
-        background-color: #007bff;
-        border: none;
-        color: white;
-        padding: 10px;
-        border-radius: 5px;
-        cursor: pointer;
-        z-index: 1001;
+        transform: translateX(0); /* Show on toggle */
     }
 
     .container {
-        margin-left: 0; /* Remove sidebar offset on mobile */
+        margin-left: 0; /* Remove sidebar offset for mobile */
         padding: 15px;
+    }
+
+    .sidebar-toggle {
+        display: block; /* Ensure visibility on mobile */
     }
 
     h1 {
@@ -139,7 +152,13 @@ button.btn-primary:hover {
 
 @media (max-width: 480px) {
     .sidebar a {
-        font-size: 0.9rem; /* Smaller text for narrow screens */
+        font-size: 0.9rem; /* Smaller link text for mobile */
+    }
+
+    .sidebar-toggle {
+        top: 10px;
+        left: 10px;
+        padding: 8px; /* Smaller button for narrow screens */
     }
 
     h1 {
