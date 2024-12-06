@@ -17,13 +17,12 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
-    flex-direction: column;
     background-color: #f8f9fa;
 }
 
 /* Sidebar styling */
 .sidebar {
-    width: 220px;
+    width: 220px; /* Adjust width for better spacing */
     background-color: #007bff;
     color: white;
     height: 100vh;
@@ -34,6 +33,12 @@ body {
     top: 0;
     left: 0;
     z-index: 1000;
+    transform: translateX(0);
+    transition: transform 0.3s ease;
+}
+
+.sidebar.hidden {
+    transform: translateX(-220px);
 }
 
 .sidebar h2, .sidebar a {
@@ -53,40 +58,75 @@ body {
     font-size: 0.95rem;
 }
 
-.sidebar a.active {
-    background-color: #0056b3;
-}
-
 .sidebar a:hover {
     background-color: #0056b3;
 }
 
+.sidebar-toggle {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1001;
+}
+
 /* Content container */
 .container {
-    margin-left: 240px;
+    margin-left: 240px; /* Adjust for sidebar width */
     padding: 30px;
     background-color: #f8f9fa;
-    max-width: 800px;
+    transition: margin-left 0.3s ease;
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    flex-direction: column; /* Stack elements vertically */
+    min-height: calc(100vh - 40px); /* Ensure full-page height minus padding */
+    text-align: center; /* Center-align text */
 }
 
-/* Section styling */
-.container section {
-    margin-bottom: 40px;
-    padding: 20px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+.sidebar.hidden + .container {
+    margin-left: 0;
 }
 
-.container section h2 {
-    font-size: 1.5rem;
+/* Adjust headings for centered layout */
+.container h1 {
     color: #007bff;
+    margin-bottom: 20px;
 }
 
-.container section p, .container section ul {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: #333;
+.container form, .container .results {
+    max-width: 800px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Button styling */
+button.btn-primary {
+    background-color: #007bff;
+    border: none;
+}
+
+button.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Results page adjustments */
+.results p {
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.results h2 {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
 }
 
 /* Responsive design */
@@ -103,6 +143,14 @@ body {
         margin-left: 0;
         padding: 15px;
     }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    form, .results {
+        padding: 15px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -110,11 +158,17 @@ body {
         font-size: 0.85rem;
     }
 
+    .sidebar-toggle {
+        top: 10px;
+        left: 10px;
+        padding: 6px;
+    }
+
     h1 {
         font-size: 1.2rem;
     }
 
-    .container section p {
+    .results p {
         font-size: 0.85rem;
     }
 }
