@@ -1,26 +1,27 @@
-/* Global Styles */
+/* Global styles */
 body, h1, h2, h3, h4, h5, h6, p {
     font-family: 'Poppins', sans-serif;
     color: #003366;
-    margin: 0;
-    padding: 0;
 }
 
 h1, h2, h3 {
     font-weight: 600;
+    text-align: center; /* Center-align all headers */
 }
 
 p {
     font-weight: 400;
-    color: #555;
+    color: #333;
+    text-align: center; /* Center-align paragraphs */
 }
 
 body {
+    margin: 0;
+    padding: 0;
     background-color: #f8f9fa;
-    display: flex;
 }
 
-/* Sidebar Styles */
+/* Sidebar styling */
 .sidebar {
     width: 250px;
     background-color: #007bff;
@@ -29,66 +30,89 @@ body {
     display: flex;
     flex-direction: column;
     padding-top: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
 }
 
 .sidebar h2, .sidebar a {
     font-weight: 600;
     color: white;
+}
+
+.sidebar a {
+    padding: 15px 20px;
     text-decoration: none;
+    display: block;
 }
 
 .sidebar a:hover {
     background-color: #0056b3;
 }
 
-/* Main Content */
+/* Main container styling for all pages */
 .container {
-    flex: 1;
-    padding: 40px 20px;
+    margin-left: 250px;
+    padding: 20px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    text-align: center;
 }
 
-/* Box Styling */
-.p-4.bg-light.rounded.shadow {
+.container h1 {
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+.container p {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+.container .btn-primary {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+}
+
+/* Box styling for centered content */
+.centered-box {
     max-width: 800px;
     width: 100%;
-    text-align: center;
     background: white;
+    padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 30px;
 }
 
-/* Button Styling */
-.btn-primary {
-    background-color: #007bff;
-    border: none;
-    padding: 10px 20px;
-    font-size: 1.1rem;
-}
-
-.btn-primary:hover {
-    background-color: #0056b3;
-}
-
-/* Responsive Adjustments */
+/* Responsive adjustments */
 @media (max-width: 768px) {
     .container {
-        padding: 20px;
+        margin-left: 0;
+        padding: 15px;
     }
 
     .sidebar {
-        display: none;
+        display: none; /* Hide sidebar for mobile */
     }
 
     .sidebar-toggle {
-        display: block;
+        display: block; /* Show toggle button */
         position: fixed;
         top: 15px;
         left: 15px;
-        z-index: 1000;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    p {
+        font-size: 1rem;
     }
 }
