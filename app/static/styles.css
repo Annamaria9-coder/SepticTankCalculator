@@ -1,1 +1,83 @@
+/* styles.css */
+
+/* Set the global font to Poppins */
+body, h1, h2, h3, h4, h5, h6, p {
+    font-family: 'Poppins', sans-serif;
+    color: #003366; /* Optional: Set a default dark blue color for headings */
+}
+
+/* Bold styling for headers */
+h1, h2, h3 {
+    font-weight: 600; /* Make headings bolder */
+}
+
+/* Regular weight for paragraph text */
+p {
+    font-weight: 400;
+    color: #333; /* Slightly lighter for normal text */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    background-color: #f8f9fa; /* Light background */
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #007bff; /* Blue theme for sidebar */
+    color: white;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+}
+
+/* Apply Poppins font and bold styling to sidebar title and links */
+.sidebar h2, .sidebar a {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600; /* Match boldness for headings */
+    color: white;
+}
+
+.sidebar h2 {
+    padding: 0 20px;
+}
+
+.sidebar a {
+    padding: 15px 20px;
+    text-decoration: none;
+    display: block;
+}
+
+.sidebar a:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+.container {
+    flex: 1;
+    padding: 20px;
+    background-color: #f8f9fa;
+}
+
+h1 {
+    color: #007bff;
+}
+
+form, .results {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button.btn-primary {
+    background-color: #007bff; /* Blue button */
+    border: none;
+}
+
+button.btn-primary:hover {
+    background-color: #0056b3; /* Darker blue button on hover */
+}
 
