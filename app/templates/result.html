@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
     <!-- Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- FontLoader for Three.js TextGeometry -->
     <script src="https://threejs.org/examples/jsm/loaders/FontLoader.js"></script>
     <script src="https://threejs.org/examples/jsm/geometries/TextGeometry.js"></script>
 </head>
@@ -31,10 +30,11 @@
 <div class="container">
     <h1 class="text-center mt-4">Calculation Results</h1>
     <div class="results mb-5 p-3 bg-light rounded shadow-sm">
-        <!-- Animated results -->
+        <!-- Results -->
         <p>Volume of Liquid: <span class="result-value" data-value="{{ results.get('Volume of Liquid', 'N/A') }}">0</span> m³</p>
         <p>Volume of Sludge: <span class="result-value" data-value="{{ results.get('Volume of Sludge', 'N/A') }}">0</span> m³</p>
         <p>Total Tank Volume: <span class="result-value" data-value="{{ results.get('Total Tank Volume', 'N/A') }}">0</span> m³</p>
+        <p>Retention Time: <span class="result-value" data-value="{{ results.get('Retention Time', 'N/A') }}">0</span> days</p>
         <p>H₂S Emissions: <span class="result-value" data-value="{{ results.get('H2S Emissions', 'N/A') }}">0</span> g/day</p>
         <p>Sand Thickness: <span class="result-value" data-value="{{ results.get('Sand Thickness', 'N/A') }}">0</span> m</p>
         <p>Leach Field Area: <span class="result-value" data-value="{{ results.get('Leach Field Area', 'N/A') }}">0</span> m²</p>
@@ -55,8 +55,8 @@
     document.addEventListener('DOMContentLoaded', () => {
         function animateValue(element, targetValue) {
             let startValue = 0;
-            let duration = 2000;
-            let stepTime = Math.abs(Math.floor(duration / targetValue));
+            let duration = 2000; // 2 seconds
+            let stepTime = Math.abs(Math.floor(duration / targetValue)) || 20; // Minimum 20ms steps
             let increment = Math.ceil(targetValue / 100);
 
             let timer = setInterval(() => {
@@ -69,14 +69,11 @@
             }, stepTime);
         }
 
-        const results = document.querySelectorAll('.result-value');
-        let delay = 0;
-        results.forEach((result) => {
+        document.querySelectorAll('.result-value').forEach(result => {
             const targetValue = parseFloat(result.dataset.value);
-            setTimeout(() => {
+            if (!isNaN(targetValue)) {
                 animateValue(result, targetValue);
-            }, delay);
-            delay += 500;
+            }
         });
     });
 </script>
@@ -89,9 +86,9 @@
         const tankDepth = {{ results.get('Tank Depth', 1) }};
 
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / 500, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / 400, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(document.getElementById('tank-visualization').clientWidth, 400);
+        renderer.setSize(window.innerWidth * 0.8, 400);
         document.getElementById('tank-visualization').appendChild(renderer.domElement);
 
         const geometry = new THREE.BoxGeometry(tankWidth, tankHeight, tankDepth);
@@ -102,7 +99,7 @@
         camera.position.z = 5;
 
         const loader = new THREE.FontLoader();
-        loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', (font) => {
+        loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', font => {
             const addText = (text, position) => {
                 const textGeometry = new THREE.TextGeometry(text, {
                     font: font,
@@ -115,9 +112,9 @@
                 scene.add(textMesh);
             };
 
-            addText(`Width: ${tankWidth} m`, { x: tankWidth / 2, y: -tankHeight / 2 - 0.3, z: 0 });
-            addText(`Height: ${tankHeight} m`, { x: -tankWidth / 2 - 0.3, y: tankHeight / 2, z: 0 });
-            addText(`Depth: ${tankDepth} m`, { x: 0, y: -tankHeight / 2 - 0.3, z: -tankDepth / 2 });
+            addText(`Width: ${tankWidth}m`, { x: tankWidth / 2, y: -tankHeight / 2 - 0.3, z: 0 });
+            addText(`Height: ${tankHeight}m`, { x: -tankWidth / 2 - 0.3, y: tankHeight / 2, z: 0 });
+            addText(`Depth: ${tankDepth}m`, { x: 0, y: -tankHeight / 2 - 0.3, z: -tankDepth / 2 });
         });
 
         function animate() {
@@ -126,17 +123,8 @@
             renderer.render(scene, camera);
         }
         animate();
-
-        window.addEventListener('resize', () => {
-            renderer.setSize(document.getElementById('tank-visualization').clientWidth, 400);
-            camera.aspect = document.getElementById('tank-visualization').clientWidth / 400;
-            camera.updateProjectionMatrix();
-        });
     });
 </script>
-
-<!-- Additional JavaScript -->
-<script src="{{ url_for('static', filename='script.js') }}"></script>
 
 </body>
 </html>

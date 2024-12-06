@@ -4,6 +4,14 @@
 MIN_BOREHOLE_DISTANCE = 30  # Minimum distance in meters
 MIN_GROUNDWATER_DEPTH = 1.5  # Minimum depth in meters to avoid contamination
 
+# Borehole distance assumptions
+BOREHOLE_DISTANCE_CONDITIONS = {
+    "low_risk": (30, 50),  # Distance range in meters for low-risk areas
+    "moderate_risk": (50, 75),  # Distance range for moderate-risk areas
+    "high_risk": (75, 100),  # Distance range for high-risk areas
+    "extreme_risk": (100, 200),  # Distance range for extreme-risk areas
+}
+
 # Sludge accumulation and flow constants
 SLUDGE_ACCUMULATION_RATE = 0.04  # m³ per capita per year
 FLUSH_COUNT = 5  # Flush count per person per day
@@ -12,9 +20,29 @@ LIQUID_DEPTH = 1.0  # Liquid depth in meters
 FREEBOARD = 0.3  # Safety margin for overflow
 
 # Mixed media filtration constants
-SAND_MIN_THICKNESS = 1.0  # Updated starting thickness of sand layer in meters
-GRAVEL_PACK_THICKNESS = 0.5  # Thickness in meters for gravel pack
-CORE_MATERIAL_THICKNESS = 0.2  # Thickness in meters for core material (e.g., sponge layer)
+MIXED_MEDIA_THICKNESS = {
+    "low_flow": {
+        "coconut_husk": 0.3,
+        "activated_charcoal": 0.2,
+        "wood_chips": 0.3,
+        "sand": 0.6,
+        "cinder_rocks": 0.2,
+    },
+    "moderate_flow": {
+        "coconut_husk": 0.5,
+        "activated_charcoal": 0.3,
+        "wood_chips": 0.5,
+        "sand": 1.0,
+        "cinder_rocks": 0.3,
+    },
+    "high_flow": {
+        "coconut_husk": 0.7,
+        "activated_charcoal": 0.5,
+        "wood_chips": 0.7,
+        "sand": 1.2,
+        "cinder_rocks": 0.3,
+    },
+}
 
 # Environmental and safety factors
 RETENTION_TIME_MULTIPLIER = 1.5  # Adjusts retention time for reuse
@@ -33,3 +61,9 @@ PERCOLATION_RATE_CLAY = 5
 # Seasonal factors
 SEASONAL_FLOODING_MULTIPLIER = 1.2  # Multiplier for areas prone to flooding
 SEASONAL_USAGE_FACTOR = 0.85  # Reduction for low seasonal usage
+
+# Groundwater depth categories
+GROUNDWATER_DEPTH = {
+    "low_water_table": (3, 5),  # Depth in meters
+    "high_water_table": (5, 30),  # Depth in meters
+}
