@@ -4,6 +4,7 @@
 MIN_BOREHOLE_DISTANCE = 30  # Minimum distance in meters
 MIN_GROUNDWATER_DEPTH = 1.5  # Minimum depth in meters to avoid contamination
 SAND_MIN_THICKNESS = 0.6  # Minimum thickness for sand layer in meters
+SAND_MAX_THICKNESS = 1.2  # Maximum thickness for sand layer in meters
 
 # Borehole distance assumptions
 BOREHOLE_DISTANCE_CONDITIONS = {
@@ -20,13 +21,13 @@ CISTERN_SIZE = 0.009  # m³ (volume per flush)
 LIQUID_DEPTH = 1.0  # Liquid depth in meters
 FREEBOARD = 0.3  # Safety margin for overflow
 
-# Mixed media filtration constants
+# Mixed media filtration constants (Adjusted ranges for sand)
 MIXED_MEDIA_THICKNESS = {
     "low_flow": {
         "coconut_husk": 0.3,
         "activated_charcoal": 0.2,
         "wood_chips": 0.3,
-        "sand": 0.6,
+        "sand": SAND_MIN_THICKNESS,
         "cinder_rocks": 0.2,
     },
     "moderate_flow": {
@@ -40,7 +41,7 @@ MIXED_MEDIA_THICKNESS = {
         "coconut_husk": 0.7,
         "activated_charcoal": 0.5,
         "wood_chips": 0.7,
-        "sand": 1.2,
+        "sand": SAND_MAX_THICKNESS,
         "cinder_rocks": 0.3,
     },
 }
@@ -67,4 +68,11 @@ SEASONAL_USAGE_FACTOR = 0.85  # Reduction for low seasonal usage
 GROUNDWATER_DEPTH = {
     "low_water_table": (3, 5),  # Depth in meters
     "high_water_table": (5, 30),  # Depth in meters
+}
+
+# Tank dimension scaling factors
+TANK_DIMENSION_SCALING = {
+    "width_ratio": 2.0,  # Width scaling factor
+    "height_ratio": 1.4,  # Height scaling factor (relative to width)
+    "depth_adjustment": 2.5,  # Depth adjustment factor
 }
