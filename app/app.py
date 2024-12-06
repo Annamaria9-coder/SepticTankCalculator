@@ -60,5 +60,10 @@ def calculate():
     # Render the form for GET requests
     return render_template('calculate.html')
 
+@app.route('/knowledge')
+def knowledge():
+    """Render the Knowledge Guide page."""
+    return render_template('knowledge.html')
+
 if __name__ == "__main__":
     app.run(debug=True)
