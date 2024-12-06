@@ -16,12 +16,14 @@ p {
 body {
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
     background-color: #f8f9fa;
 }
 
 /* Sidebar styling */
 .sidebar {
-    width: 220px; /* Slightly narrower sidebar */
+    width: 220px; /* Reduced size for better desktop spacing */
     background-color: #007bff;
     color: white;
     height: 100vh;
@@ -31,31 +33,37 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1000;
+    z-index: 1000; /* Ensure it overlays content */
+    transform: translateX(0); /* Default: visible */
+    transition: transform 0.3s ease; /* Smooth toggle */
+}
+
+.sidebar.hidden {
+    transform: translateX(-220px); /* Hide sidebar */
 }
 
 .sidebar h2, .sidebar a {
     font-weight: 600;
     color: white;
-    text-decoration: none;
 }
 
 .sidebar h2 {
-    margin: 10px 20px;
-    font-size: 1.4rem;
+    padding: 0 20px;
+    margin-bottom: 10px;
 }
 
 .sidebar a {
     padding: 12px 20px;
+    text-decoration: none;
     display: block;
-    transition: background-color 0.3s;
+    font-size: 0.95rem;
 }
 
 .sidebar a:hover {
     background-color: #0056b3;
 }
 
-/* Sidebar toggle button */
+/* Toggle button for sidebar */
 .sidebar-toggle {
     position: fixed;
     top: 15px;
@@ -63,7 +71,7 @@ body {
     background-color: #007bff;
     border: none;
     color: white;
-    padding: 10px;
+    padding: 8px;
     border-radius: 5px;
     cursor: pointer;
     z-index: 1001;
@@ -71,62 +79,94 @@ body {
 
 /* Content container */
 .container {
-    margin-left: 240px; /* Adjusted for sidebar width */
-    padding: 40px;
+    margin-left: 240px; /* Adjust for sidebar width */
+    padding: 30px;
     background-color: #f8f9fa;
+    transition: margin-left 0.3s ease; /* Smooth transition */
 }
 
-/* Centered content for index page */
+.sidebar.hidden + .container {
+    margin-left: 0;
+}
+
+/* Center content for better alignment */
 .container h1 {
     text-align: center;
-    margin-bottom: 20px;
     color: #007bff;
+    margin-bottom: 20px;
 }
 
-.container p {
-    text-align: center;
-    margin-bottom: 40px;
-    font-size: 1.2rem;
-    color: #333;
-}
-
-.container .btn {
-    display: block;
+.container form, .container .results {
+    max-width: 800px;
     margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Button styling */
+button.btn-primary {
     background-color: #007bff;
     border: none;
 }
 
-.container .btn:hover {
+button.btn-primary:hover {
     background-color: #0056b3;
 }
 
-/* Responsive adjustments */
+/* Results page adjustments */
+.results p {
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.results h2 {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+/* Responsive design */
 @media (max-width: 768px) {
     .sidebar {
-        display: none; /* Hide sidebar on smaller screens */
+        transform: translateX(-220px); /* Default: hidden on mobile */
     }
 
-    .sidebar-toggle {
-        display: block; /* Ensure toggle button is visible */
+    .sidebar.visible {
+        transform: translateX(0); /* Show on toggle */
     }
 
     .container {
-        margin-left: 0;
-        padding: 20px;
+        margin-left: 0; /* Remove sidebar offset for mobile */
+        padding: 15px;
     }
 
-    .container h1 {
+    h1 {
         font-size: 1.5rem;
+    }
+
+    form, .results {
+        padding: 15px;
     }
 }
 
 @media (max-width: 480px) {
-    .container h1 {
+    .sidebar a {
+        font-size: 0.85rem;
+    }
+
+    .sidebar-toggle {
+        top: 10px;
+        left: 10px;
+        padding: 6px;
+    }
+
+    h1 {
         font-size: 1.2rem;
     }
 
-    .container p {
-        font-size: 1rem;
+    .results p {
+        font-size: 0.85rem;
     }
 }
