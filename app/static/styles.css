@@ -85,11 +85,37 @@ body {
     transition: margin-left 0.3s ease; /* Smooth transition */
 }
 
-.sidebar.hidden + .container {
-    margin-left: 0;
+/* Specific centering for the home page */
+.container.home {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh; /* Ensure it spans the full height */
+    margin-left: 240px; /* Adjust for sidebar width */
 }
 
-/* Center content for better alignment */
+.container.home h1 {
+    font-size: 2rem;
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+.container.home p {
+    font-size: 1rem;
+    max-width: 800px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container.home button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+}
+
+/* Center content for other pages */
 .container h1 {
     text-align: center;
     color: #007bff;
@@ -140,6 +166,10 @@ button.btn-primary:hover {
     .container {
         margin-left: 0; /* Remove sidebar offset for mobile */
         padding: 15px;
+    }
+
+    .container.home {
+        margin-left: 0; /* Adjust for mobile */
     }
 
     h1 {
