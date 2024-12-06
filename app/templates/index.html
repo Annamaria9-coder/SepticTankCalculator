@@ -17,51 +17,22 @@
     <h2>Septic Calculator</h2>
     <a href="/">Home</a>
     <a href="/calculate">Calculator</a>
-    <a href="#">Results</a>
+    <a href="/results">Results</a>
 </div>
 
-<!-- Sidebar Toggle Button for Mobile -->
-<button class="sidebar-toggle d-md-none">☰ Menu</button>
+<!-- Toggle Button for Sidebar -->
+<button class="sidebar-toggle">Menu</button>
 
-<div class="main-content container mt-4">
-    <h1 class="text-center">Septic Tank Design Tool</h1>
-    <p class="text-center text-muted mb-4">
-        This tool helps engineers and planners calculate the required parameters for septic tanks.
-    </p>
-    <form action="/calculate" method="post" class="p-4 bg-light rounded shadow">
-        <div class="row g-3">
-            <div class="col-md-4">
-                <label for="household_size" class="form-label">Household Size (Number of people):</label>
-                <input type="number" id="household_size" name="household_size" class="form-control" required>
-            </div>
-            <div class="col-md-4">
-                <label for="tank_type" class="form-label">Tank Type:</label>
-                <select id="tank_type" name="tank_type" class="form-select" required>
-                    <option value="3">3-Chambered Tank</option>
-                    <option value="4">4-Chambered Tank</option>
-                </select>
-            </div>
-            <div class="col-md-4">
-                <label for="retention_time" class="form-label">Retention Time (days):</label>
-                <input type="number" id="retention_time" name="retention_time" class="form-control" required>
-            </div>
-            <div class="col-md-4">
-                <label for="borehole_distance" class="form-label">Distance to Borehole (m):</label>
-                <input type="number" id="borehole_distance" name="borehole_distance" class="form-control" required>
-            </div>
-            <div class="col-md-4">
-                <label for="seasonal_factor" class="form-label">Seasonal Factor:</label>
-                <input type="number" id="seasonal_factor" name="seasonal_factor" class="form-control" required>
-            </div>
-            <div class="col-md-4">
-                <label for="sand_thickness" class="form-label">Sand Thickness (m):</label>
-                <input type="number" id="sand_thickness" name="sand_thickness" class="form-control" required>
-            </div>
-            <div class="col-12 text-center">
-                <button type="submit" class="btn btn-primary mt-3">Calculate</button>
-            </div>
-        </div>
-    </form>
+<!-- Main Content -->
+<div class="container d-flex justify-content-center align-items-center" style="height: 100vh; text-align: center;">
+    <div>
+        <h1 class="mb-4">Welcome to the Global Communities' Septic Tank Calculator</h1>
+        <p class="mb-4">
+            This tool helps engineers and community planners calculate the required volume for septic tanks
+            based on various parameters. Click on "Calculator" in the sidebar or use the button below to start calculating septic tank requirements.
+        </p>
+        <a href="/calculate" class="btn btn-primary btn-lg">Start Calculating</a>
+    </div>
 </div>
 
 <!-- JavaScript for Sidebar Toggle -->
