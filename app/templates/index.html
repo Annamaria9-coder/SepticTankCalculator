@@ -9,7 +9,6 @@
 </head>
 <body>
 
-<!-- Sidebar -->
 <div class="sidebar">
     <h2>Septic Calculator</h2>
     <a href="/">Home</a>
@@ -17,28 +16,25 @@
     <a href="/results">Results</a>
 </div>
 
+<!-- Sidebar Toggle -->
+<button class="sidebar-toggle">Menu</button>
+
 <!-- Main Content -->
 <div class="container">
-    <div class="p-4 bg-light rounded shadow">
-        <h1 class="text-center">Welcome to the Global Communities' Septic Tank Calculator</h1>
-        <p class="text-center">
-            This tool helps engineers and community planners calculate the required volume for septic tanks based on various parameters.
-        </p>
-        <p class="text-center">
-            Click on "Calculator" in the sidebar or use the button below to start calculating septic tank requirements.
-        </p>
-        <div class="text-center mt-4">
-            <a href="/calculate" class="btn btn-primary">Start Calculating</a>
-        </div>
+    <div class="centered-box">
+        <h1>Welcome to the Global Communities' Septic Tank Calculator</h1>
+        <p>This tool helps engineers and community planners calculate the required volume for septic tanks based on various parameters.</p>
+        <p>Click on "Calculator" in the sidebar or use the button below to start calculating septic tank requirements.</p>
+        <a href="/calculate" class="btn btn-primary">Start Calculating</a>
     </div>
 </div>
 
-<!-- Add JavaScript for Sidebar Toggle -->
+<!-- Sidebar Toggle Script -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const sidebar = document.querySelector('.sidebar');
         const toggleButton = document.querySelector('.sidebar-toggle');
-        toggleButton?.addEventListener('click', () => {
+        toggleButton.addEventListener('click', () => {
             sidebar.classList.toggle('hidden');
         });
     });
