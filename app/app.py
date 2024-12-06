@@ -30,13 +30,24 @@ def calculate():
 
             # Validate three-chamber specific inputs
             if tank_type == "3":
-                if not soil_type or not groundwater_flow or not groundwater_depth or not borehole_distance:
+                missing_fields = []
+                if not soil_type:
+                    missing_fields.append("Soil Type")
+                if not groundwater_flow:
+                    missing_fields.append("Groundwater Flow Direction")
+                if not groundwater_depth:
+                    missing_fields.append("Groundwater Depth")
+                if not borehole_distance:
+                    missing_fields.append("Distance to Borehole")
+
+                if missing_fields:
                     flash(
-                        "Please fill in all required fields for 3-chambered tanks.",
+                        f"Please fill in the following fields for 3-chambered tanks: {', '.join(missing_fields)}.",
                         "warning"
                     )
                     return redirect(url_for('calculate'))
 
+                # Convert numeric fields
                 groundwater_depth = float(groundwater_depth)
                 borehole_distance = float(borehole_distance)
 
