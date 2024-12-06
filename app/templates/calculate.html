@@ -15,7 +15,7 @@
     <h2>Septic Calculator</h2>
     <a href="/">Home</a>
     <a href="/calculate">Calculator</a>
-    <a href="/knowledge">Knowledge Guide</a> <!-- Add the new link here -->
+    <a href="/knowledge">Knowledge Guide</a>
     <a href="#">Results</a>
 </div>
 
@@ -41,41 +41,36 @@
         
         <!-- Tank Type -->
         <label for="tank_type">Tank Type:</label>
-        <select id="tank_type" name="tank_type" class="form-select" required>
+        <select id="tank_type" name="tank_type" class="form-select" required onchange="toggleFields()">
             <option value="3">3-Chambered Tank</option>
             <option value="4">4-Chambered Tank</option>
         </select>
         
-        <!-- Soil Type -->
-        <label for="soil_type">Soil Type:</label>
-        <select id="soil_type" name="soil_type" class="form-select" required>
-            <option value="sandy">Sandy</option>
-            <option value="clay">Clay</option>
-            <option value="loam">Loam</option>
-        </select>
+        <!-- Conditional Fields for 3-Chambered Tanks -->
+        <div id="three_chamber_fields" style="display: none;">
+            <label for="soil_type">Soil Type:</label>
+            <select id="soil_type" name="soil_type" class="form-select">
+                <option value="sandy">Sandy</option>
+                <option value="clay">Clay</option>
+                <option value="loam">Loam</option>
+            </select>
 
-        <!-- Groundwater Flow Direction -->
-        <label for="groundwater_flow">Groundwater Flow Direction:</label>
-        <select id="groundwater_flow" name="groundwater_flow" class="form-select" required>
-            <option value="upstream">Upstream</option>
-            <option value="downstream">Downstream</option>
-        </select>
-        
-        <!-- Groundwater Depth -->
-        <label for="groundwater_depth">Groundwater Depth (meters):</label>
-        <input type="number" id="groundwater_depth" name="groundwater_depth" class="form-control" required>
-        
-        <!-- Borehole Distance -->
-        <label for="borehole_distance">Distance to Borehole (m):</label>
-        <input type="number" id="borehole_distance" name="borehole_distance" class="form-control" required>
-        
+            <label for="groundwater_flow">Groundwater Flow Direction:</label>
+            <select id="groundwater_flow" name="groundwater_flow" class="form-select">
+                <option value="upstream">Upstream</option>
+                <option value="downstream">Downstream</option>
+            </select>
+
+            <label for="groundwater_depth">Groundwater Depth (meters):</label>
+            <input type="number" id="groundwater_depth" name="groundwater_depth" class="form-control">
+
+            <label for="borehole_distance">Distance to Borehole (m):</label>
+            <input type="number" id="borehole_distance" name="borehole_distance" class="form-control">
+        </div>
+
         <!-- Seasonal Factor -->
         <label for="seasonal_factor">Seasonal Factor:</label>
         <input type="number" id="seasonal_factor" name="seasonal_factor" class="form-control" required>
-        
-        <!-- Sand Thickness -->
-        <label for="sand_thickness">Sand Thickness (m):</label>
-        <input type="number" id="sand_thickness" name="sand_thickness" class="form-control" required>
 
         <!-- Effluent Reuse -->
         <label for="effluent_reuse">Effluent Reuse:</label>
@@ -96,7 +91,7 @@
     </form>
 </div>
 
-<!-- Add JavaScript for Sidebar Toggle -->
+<!-- Add JavaScript for Sidebar Toggle and Field Toggling -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const sidebar = document.querySelector('.sidebar');
@@ -106,6 +101,17 @@
             sidebar.classList.toggle('hidden');
         });
     });
+
+    function toggleFields() {
+        const tankType = document.getElementById('tank_type').value;
+        const threeChamberFields = document.getElementById('three_chamber_fields');
+
+        if (tankType === '3') {
+            threeChamberFields.style.display = 'block';
+        } else {
+            threeChamberFields.style.display = 'none';
+        }
+    }
 </script>
 
 </body>
