@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from .input_parameters import get_user_inputs
 from .constants import MIN_BOREHOLE_DISTANCE
 from .calculations import calculate_tank_requirements
 
@@ -16,29 +15,55 @@ def calculate():
     """Handle GET and POST requests for the calculation page."""
     if request.method == 'POST':
         try:
-            # Validate and collect inputs
-            borehole_distance = request.form.get('borehole_distance')
-            if borehole_distance:
+            # Collect common inputs
+            household_size = int(request.form.get('household_size', 0))
+            tank_type = request.form.get('tank_type')
+            seasonal_factor = float(request.form.get('seasonal_factor', 1.0))
+            effluent_reuse = request.form.get('effluent_reuse') == "yes"
+            prone_to_flooding = request.form.get('flooding_risk') == "yes"
+
+            # Initialize optional inputs
+            soil_type = request.form.get('soil_type', None)
+            groundwater_flow = request.form.get('groundwater_flow', None)
+            groundwater_depth = request.form.get('groundwater_depth', None)
+            borehole_distance = request.form.get('borehole_distance', None)
+
+            # Validate three-chamber specific inputs
+            if tank_type == "3":
+                if not soil_type or not groundwater_flow or not groundwater_depth or not borehole_distance:
+                    flash(
+                        "Please fill in all required fields for 3-chambered tanks.",
+                        "warning"
+                    )
+                    return redirect(url_for('calculate'))
+
+                groundwater_depth = float(groundwater_depth)
                 borehole_distance = float(borehole_distance)
+
                 if borehole_distance < MIN_BOREHOLE_DISTANCE:
                     flash(
                         f"Warning: Distance to borehole must be at least {MIN_BOREHOLE_DISTANCE} meters.",
                         "warning"
                     )
                     return redirect(url_for('calculate'))
+            else:
+                # Reset unused inputs for 4-chamber tanks
+                soil_type = None
+                groundwater_flow = None
+                groundwater_depth = None
+                borehole_distance = None
 
-            # Collect user inputs from the form
+            # Collect user inputs into a dictionary
             user_inputs = {
-                "household_size": int(request.form.get('household_size', 0)),
-                "tank_type": request.form.get('tank_type'),
-                "soil_type": request.form.get('soil_type'),  # Added soil_type
-                "groundwater_flow": request.form.get('groundwater_flow'),  # Added groundwater_flow
-                "groundwater_depth": float(request.form.get('groundwater_depth', 0)),  # Added groundwater_depth
+                "household_size": household_size,
+                "tank_type": tank_type,
+                "soil_type": soil_type,
+                "groundwater_flow": groundwater_flow,
+                "groundwater_depth": groundwater_depth,
                 "borehole_distance": borehole_distance,
-                "seasonal_factor": float(request.form.get('seasonal_factor', 1.0)),
-                "sand_thickness": float(request.form.get('sand_thickness', 0)),
-                "effluent_reuse": request.form.get('effluent_reuse') == "yes",  # Convert to boolean
-                "prone_to_flooding": request.form.get('flooding_risk') == "yes",  # Convert to boolean
+                "seasonal_factor": seasonal_factor,
+                "effluent_reuse": effluent_reuse,
+                "prone_to_flooding": prone_to_flooding,
             }
 
             # Perform calculations
