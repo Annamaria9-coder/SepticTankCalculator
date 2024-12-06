@@ -10,7 +10,6 @@
 </head>
 <body>
 
-    
 <!-- Sidebar -->
 <div class="sidebar">
     <h2>Septic Calculator</h2>
@@ -35,7 +34,7 @@
         {% endif %}
     {% endwith %}
 
-    <form action="/calculate" method="post">
+    <form action="/calculate" method="post" id="calculation-form">
         <!-- Household Size -->
         <label for="household_size">Household Size (Number of people):</label>
         <input type="number" id="household_size" name="household_size" class="form-control" required>
@@ -50,20 +49,20 @@
         <!-- Conditional Fields for 3-Chambered Tanks -->
         <div id="three_chamber_fields" style="display: none;">
             <label for="soil_type">Soil Type:</label>
-            <select id="soil_type" name="soil_type" class="form-select">
+            <select id="soil_type" name="soil_type" class="form-select" required>
                 <option value="sandy">Sandy</option>
                 <option value="clay">Clay</option>
                 <option value="loam">Loam</option>
             </select>
 
             <label for="groundwater_flow">Groundwater Flow Direction:</label>
-            <select id="groundwater_flow" name="groundwater_flow" class="form-select">
+            <select id="groundwater_flow" name="groundwater_flow" class="form-select" required>
                 <option value="upstream">Upstream</option>
                 <option value="downstream">Downstream</option>
             </select>
 
             <label for="groundwater_depth">Groundwater Depth (meters):</label>
-            <input type="number" id="groundwater_depth" name="groundwater_depth" class="form-control">
+            <input type="number" id="groundwater_depth" name="groundwater_depth" class="form-control" required>
         </div>
 
         <!-- Seasonal Factor -->
@@ -98,6 +97,30 @@
         toggleButton.addEventListener('click', () => {
             sidebar.classList.toggle('hidden');
         });
+
+        // Form validation on submit
+        const form = document.getElementById('calculation-form');
+        form.addEventListener('submit', (event) => {
+            const tankType = document.getElementById('tank_type').value;
+            const threeChamberFields = document.getElementById('three_chamber_fields');
+            if (tankType === '3') {
+                const requiredFields = threeChamberFields.querySelectorAll('[required]');
+                let valid = true;
+                requiredFields.forEach(field => {
+                    if (!field.value) {
+                        valid = false;
+                        field.classList.add('is-invalid');
+                    } else {
+                        field.classList.remove('is-invalid');
+                    }
+                });
+
+                if (!valid) {
+                    event.preventDefault();
+                    alert('Please fill in all required fields for 3-chambered tanks.');
+                }
+            }
+        });
     });
 
     function toggleFields() {
@@ -106,8 +129,12 @@
 
         if (tankType === '3') {
             threeChamberFields.style.display = 'block';
+            const inputs = threeChamberFields.querySelectorAll('input, select');
+            inputs.forEach(input => input.setAttribute('required', 'required'));
         } else {
             threeChamberFields.style.display = 'none';
+            const inputs = threeChamberFields.querySelectorAll('input, select');
+            inputs.forEach(input => input.removeAttribute('required'));
         }
     }
 </script>
