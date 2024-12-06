@@ -105,6 +105,8 @@ def calculate_tank_requirements(user_inputs):
     h2s_emissions = calculate_h2s_emissions(household_size)
 
     if tank_type == "3":
+        if not soil_type or not groundwater_depth or not groundwater_flow:
+            raise ValueError("Required fields for 3-chamber tank are missing.")
         leach_field_area = calculate_leach_field_area(adjusted_total_volume, soil_type, effluent_reuse)
         groundwater_safety = calculate_groundwater_safety(groundwater_depth, groundwater_flow)
     else:
